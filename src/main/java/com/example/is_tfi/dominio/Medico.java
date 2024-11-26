@@ -1,11 +1,22 @@
 package com.example.is_tfi.dominio;
 
-public class Medico {
-    private String nombre;
-    private int matricula;
+import java.time.LocalDate;
 
-    public Medico(String nombre, int matricula) {
-        this.nombre = nombre;
+public class Medico extends Persona {
+    private int matricula;
+    private String especialidad;
+
+    public Medico(Long dni,
+                  Long cuil,
+                  String nombre,
+                  LocalDate fecheNacimiento,
+                  String email,
+                  String telefono,
+                  Direccion direccion,
+                  int matricula,
+                  String especialidad) {
+        super(dni, cuil, nombre, fecheNacimiento, email, telefono, direccion);
         this.matricula = matricula;
+        this.especialidad = especialidad;
     }
 }

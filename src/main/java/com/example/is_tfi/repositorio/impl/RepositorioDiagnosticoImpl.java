@@ -2,8 +2,6 @@ package com.example.is_tfi.repositorio.impl;
 
 import com.example.is_tfi.dominio.Diagnostico;
 import com.example.is_tfi.repositorio.RepositorioDiagnostico;
-import com.example.is_tfi.repositorio.RepositorioPaciente;
-import jdk.jshell.Diag;
 
 import java.util.List;
 import java.util.Optional;

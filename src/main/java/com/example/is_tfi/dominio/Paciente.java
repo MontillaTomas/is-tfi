@@ -2,24 +2,31 @@ package com.example.is_tfi.dominio;
 
 import java.time.LocalDate;
 
-public class Paciente {
-    private int dni;
-    private String nombre;
+public class Paciente extends Persona {
+    private ObraSocial obraSocial;
+    private int numeroAfiliadoObraSocial;
     private HistoriaClinica historiaClinica;
-    private LocalDate fechaNacimiento;
 
-    public int getDni(){
-        return dni;
-    }
-
-    public Paciente(int dni,
+    public Paciente(Long dni,
+                    Long cuil,
                     String nombre,
-                    LocalDate fechaNacimiento) {
-        this.dni = dni;
-        this.nombre = nombre;
+                    LocalDate fechaNacimiento,
+                    String email,
+                    String telefono,
+                    ObraSocial obraSocial,
+                    int numeroAfiliadoObraSocial,
+                    Direccion direccion) {
+        super(dni, cuil, nombre, fechaNacimiento, email, telefono, direccion);
+        this.obraSocial = obraSocial;
+        this.numeroAfiliadoObraSocial = numeroAfiliadoObraSocial;
         this.historiaClinica = new HistoriaClinica();
-        this.fechaNacimiento = fechaNacimiento;
     }
+
+    public Long getDni(){
+        return super.getDni();
+    }
+
+
 
     public void agregarDiagnostico(String diagnostico) {
         // La responsabilidad de validar el diagnóstico se la da al servicio
