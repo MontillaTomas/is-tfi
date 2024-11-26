@@ -1,11 +1,13 @@
 package com.example.is_tfi.dominio;
 
 public class Medicamento {
-    private String nombreComercial;
-    private String nombreGenerico;
+   private int codigo;
+   private String descripcion;
+   private String formato;
 
-    public Medicamento(String nombreComercial, String nombreGenerico) {
-        this.nombreComercial = nombreComercial;
-        this.nombreGenerico = nombreGenerico;
+    public Medicamento(int codigo, String descripcion, String formato) {
+        this.codigo = codigo;
+        this.descripcion = descripcion;
+        this.formato = formato;
     }
 }

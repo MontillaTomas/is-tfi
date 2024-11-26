@@ -24,4 +24,14 @@ public class HistoriaClinica {
         Diagnostico diagnostico = buscarDiagnostico(nombreDiagnostico);
         diagnostico.agregarEvolucion(informe, medico);
     }
+
+    public void crearRecetaDigital(String diagnostico, Long idEvolucion, List<Medicamento> medicamentos, Medico medico) {
+        Diagnostico d = buscarDiagnostico(diagnostico);
+        d.crearRecetaDigital(idEvolucion, medicamentos, medico);
+    }
+
+    public void crearPedidoLaboratorio(String diagnostico, Long idEvolucion, String texto, Medico medico) {
+        Diagnostico d = buscarDiagnostico(diagnostico);
+        d.crearPedidoLaboratorio(idEvolucion, texto, medico);
+    }
 }

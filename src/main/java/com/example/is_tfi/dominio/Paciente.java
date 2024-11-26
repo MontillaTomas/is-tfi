@@ -1,6 +1,7 @@
 package com.example.is_tfi.dominio;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class Paciente extends Persona {
     private ObraSocial obraSocial;
@@ -35,5 +36,13 @@ public class Paciente extends Persona {
 
     public void agregarEvolucion(String diagnostico, String informe, Medico medico) {
         historiaClinica.agregarEvolucion(diagnostico, informe, medico);
+    }
+
+    public void crearRecetaDigital(String diagnostico, Long idEvolucion, List<Medicamento> medicamentos, Medico medico) {
+        historiaClinica.crearRecetaDigital(diagnostico, idEvolucion, medicamentos, medico);
+    }
+
+    public void crearPedidoLaboratorio(String diagnostico, Long idEvolucion, String texto, Medico medico) {
+        historiaClinica.crearPedidoLaboratorio(diagnostico, idEvolucion, texto, medico);
     }
 }

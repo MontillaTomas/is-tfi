@@ -1,9 +1,6 @@
 package com.example.is_tfi.repositorio.impl;
 
-import com.example.is_tfi.dominio.Direccion;
-import com.example.is_tfi.dominio.Medico;
-import com.example.is_tfi.dominio.ObraSocial;
-import com.example.is_tfi.dominio.Paciente;
+import com.example.is_tfi.dominio.*;
 import com.example.is_tfi.repositorio.RepositorioPaciente;
 
 import java.time.LocalDate;
@@ -44,6 +41,12 @@ public class RepositorioPacienteImpl implements RepositorioPaciente {
         paciente.agregarEvolucion("Gripe", "El paciente se encuentra estable", medico);
         paciente.agregarEvolucion("Gripe", "El paciente se encuentra mejor", medico);
         paciente.agregarEvolucion("Dengue", "El paciente se encuentra peor", medico);
+
+        paciente.crearRecetaDigital("Gripe", 1L, List.of(new Medicamento(1, "Ibuprofeno", "A"), new Medicamento(2, "Tafirol", "B")), medico);
+        paciente.crearRecetaDigital("Dengue", 1L, List.of(new Medicamento(1, "Ibuprofeno", "A")), medico);
+
+        paciente.crearPedidoLaboratorio("Gripe", 1L, "Hacer analisis de sangre", medico);
+        paciente.crearPedidoLaboratorio("Dengue", 1L, "Hacer analisis de orina", medico);
 
         this.pacientes.add(paciente);
     }
