@@ -14,9 +14,6 @@ public class IsTfiApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(IsTfiApplication.class, args);
-		RepositorioPacienteImpl repositorioPaciente = new RepositorioPacienteImpl();
-		Paciente paciente = repositorioPaciente.buscarPacientePorDni(44747797).get();
-		System.out.println(paciente);
 	}
 
 }
