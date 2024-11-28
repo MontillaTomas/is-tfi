@@ -37,6 +37,8 @@ public class RepositorioPacienteImpl implements RepositorioPaciente {
         paciente.agregarDiagnostico("Gripe"); // Este diagnostico tendra 2 evoluciones
         paciente.agregarDiagnostico("Dengue"); // Este diagnostico tendra 1 evolucion
         paciente.agregarDiagnostico("Zika"); // Este diagnostico no tendra evoluciones
+        paciente.agregarDiagnostico("Gripe");// Este diagnostico ya está agregado, debería dar error
+
 
         paciente.agregarEvolucion("Gripe", "El paciente se encuentra estable", medico);
         paciente.agregarEvolucion("Gripe", "El paciente se encuentra mejor", medico);

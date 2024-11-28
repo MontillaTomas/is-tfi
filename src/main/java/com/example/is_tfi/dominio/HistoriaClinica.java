@@ -5,11 +5,17 @@ import java.util.List;
 
 public class HistoriaClinica {
     private List<Diagnostico> diagnosticos;
+
     public HistoriaClinica() {
         diagnosticos = new ArrayList<>();
     }
 
     public void agregarDiagnostico(String diagnostico) {
+        for (Diagnostico d : diagnosticos) {
+            if(d.getNombre().equals(diagnostico)) {
+                throw new RuntimeException("El paciente ya posee este diagnostico");
+            }
+        }
         diagnosticos.add(new Diagnostico(diagnostico));
     }
 
