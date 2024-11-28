@@ -10,4 +10,12 @@ public class PedidoLaboratorio {
         this.texto = texto;
         this.medico = medico;
     }
+
+    public String getTexto() {
+        return texto;
+    }
+
+    public Medico getMedico() {
+        return medico;
+    }
 }
