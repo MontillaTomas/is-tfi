@@ -6,5 +6,5 @@ import java.util.Optional;
 
 public interface RepositorioPaciente {
     void guardarPaciente(Paciente paciente);
-    Optional<Paciente> buscarPacientePorDni(int dni);
+    Optional<Paciente> buscarPacientePorDni(Long dni);
 }

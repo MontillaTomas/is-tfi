@@ -6,6 +6,7 @@ import com.example.is_tfi.repositorio.RepositorioPaciente;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class RepositorioPacienteImpl implements RepositorioPaciente {
@@ -37,8 +38,6 @@ public class RepositorioPacienteImpl implements RepositorioPaciente {
         paciente.agregarDiagnostico("Gripe"); // Este diagnostico tendra 2 evoluciones
         paciente.agregarDiagnostico("Dengue"); // Este diagnostico tendra 1 evolucion
         paciente.agregarDiagnostico("Zika"); // Este diagnostico no tendra evoluciones
-        paciente.agregarDiagnostico("Gripe");// Este diagnostico ya está agregado, debería dar error
-
 
         paciente.agregarEvolucion("Gripe", "El paciente se encuentra estable", medico);
         paciente.agregarEvolucion("Gripe", "El paciente se encuentra mejor", medico);
@@ -59,9 +58,9 @@ public class RepositorioPacienteImpl implements RepositorioPaciente {
     }
 
     @Override
-    public Optional<Paciente> buscarPacientePorDni(int dni) {
+    public Optional<Paciente> buscarPacientePorDni(Long dni) {
         return this.pacientes.stream()
-                .filter(paciente -> paciente.getDni() == dni)
+                .filter(paciente -> Objects.equals(paciente.getDni(), dni))
                 .findFirst();
     }
 }
