@@ -2,6 +2,7 @@ package com.example.is_tfi.dominio;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 public class RecetaDigital {
     private List<Medicamento> medicamentos;
@@ -16,6 +17,10 @@ public class RecetaDigital {
         this.medicamentos = medicamentos;
         this.fechaHora = LocalDateTime.now();
         this.medico = medico;
+    }
+
+    public List<Medicamento> getMedicamentos() {
+        return medicamentos;
     }
 
 }

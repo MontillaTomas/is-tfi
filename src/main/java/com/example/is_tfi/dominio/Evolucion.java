@@ -20,6 +20,22 @@ public class Evolucion {
         this.fechaHora = LocalDateTime.now();
     }
 
+    public Map<Long, PedidoLaboratorio> getPedidosLaboratorio() {
+        return pedidosLaboratorio;
+    }
+
+    public Map<Long, RecetaDigital> getRecetasDigitales() {
+        return recetasDigitales;
+    }
+
+    public String getInforme() {
+        return informe;
+    }
+
+    public Medico getMedico() {
+        return medico;
+    }
+
     public void crearRecetaDigital(List<Medicamento> medicamentos, Medico medico) {
         recetasDigitales.put(recetasDigitales.size() + 1L, new RecetaDigital(medicamentos, medico));
     }

@@ -12,6 +12,10 @@ public class Diagnostico {
         return nombre;
     }
 
+    public Map<Long, Evolucion> getEvoluciones() {
+        return evoluciones;
+    }
+
     public Diagnostico(String nombre) {
         this.nombre = nombre;
         this.evoluciones = new HashMap<>();
