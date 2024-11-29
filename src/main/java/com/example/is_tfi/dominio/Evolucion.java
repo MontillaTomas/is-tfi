@@ -20,6 +20,14 @@ public class Evolucion {
         this.fechaHora = LocalDateTime.now();
     }
 
+    public Evolucion(String informe, Medico medico, LocalDateTime fechaHora) {
+        this.informe = informe;
+        this.medico = medico;
+        this.recetasDigitales = new HashMap<>();
+        this.pedidosLaboratorio = new HashMap<>();
+        this.fechaHora = fechaHora;
+    }
+
     public Map<Long, PedidoLaboratorio> getPedidosLaboratorio() {
         return pedidosLaboratorio;
     }
@@ -42,5 +50,9 @@ public class Evolucion {
 
     public void crearPedidoLaboratorio(String texto, Medico medico) {
         pedidosLaboratorio.put(pedidosLaboratorio.size() + 1L, new PedidoLaboratorio(texto, medico));
+    }
+
+    public LocalDateTime getFechaHora() {
+        return fechaHora;
     }
 }
