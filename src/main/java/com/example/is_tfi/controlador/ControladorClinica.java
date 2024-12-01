@@ -14,6 +14,7 @@ import com.example.is_tfi.repositorio.impl.RepositorioPacienteImpl;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -34,6 +35,23 @@ public class ControladorClinica {
             new Direccion("Calle Falsa", 123, "1234", "Springfield"),
             123456,
             "Clinico");
+
+    @GetMapping("pacientes/{dni}")
+    public PacienteDTO obtenerPaciente(@PathVariable Long dni) {
+        return repositorioPaciente.buscarPacientePorDni(dni)
+                .map(pacienteMapper::toDto)
+                .orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
+    }
+
+    @GetMapping("pacientes")
+    public List<PacienteDTO> obtenerPacientes(@RequestParam(required = false) String busqueda) {
+        if(busqueda != null && !busqueda.isEmpty()) {
+            return repositorioPaciente.buscarPacientesPorTexto(busqueda).stream()
+                    .map(pacienteMapper::toDto)
+                    .toList();
+        }
+        return pacienteMapper.toDto(repositorioPaciente.obtenerPacientes());
+    }
 
     @PostMapping("pacientes")
     public PacienteDTO crearPaciente(@RequestBody  CrearPacienteDTO dto) {
