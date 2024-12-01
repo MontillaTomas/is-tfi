@@ -63,4 +63,11 @@ public class RepositorioPacienteImpl implements RepositorioPaciente {
                 .filter(paciente -> Objects.equals(paciente.getDni(), dni))
                 .findFirst();
     }
+
+    @Override
+    public Optional<Paciente> buscarPacientePorCuil(Long cuil) {
+        return this.pacientes.stream()
+                .filter(paciente -> Objects.equals(paciente.getCuil(), cuil))
+                .findFirst();
+    }
 }
