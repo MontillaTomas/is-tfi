@@ -10,4 +10,5 @@ public interface RepositorioPaciente {
     Optional<Paciente> buscarPacientePorDni(Long dni);
     Optional<Paciente> buscarPacientePorCuil(Long cuil);
     List<Paciente> obtenerPacientes();
+    List<Paciente> buscarPacientesPorTexto(String texto);
 }

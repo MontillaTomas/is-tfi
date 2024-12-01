@@ -3,11 +3,14 @@ package com.example.is_tfi.repositorio.impl;
 import com.example.is_tfi.dominio.*;
 import com.example.is_tfi.repositorio.RepositorioPaciente;
 
+import java.text.Normalizer;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class RepositorioPacienteImpl implements RepositorioPaciente {
     private List<Paciente> pacientes;
@@ -74,5 +77,25 @@ public class RepositorioPacienteImpl implements RepositorioPaciente {
     @Override
     public List<Paciente> obtenerPacientes() {
         return this.pacientes;
+    }
+
+    private String eliminarDiacriticos(String texto) {
+        if (texto == null) return null;
+        String textoNormalizado = Normalizer.normalize(texto, Normalizer.Form.NFD);
+        Pattern patronDiacriticos = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        return patronDiacriticos.matcher(textoNormalizado).replaceAll("");
+    }
+
+    @Override
+    public List<Paciente> buscarPacientesPorTexto(String texto) {
+        String textoNormalizado = eliminarDiacriticos(texto.toUpperCase());
+        return this.pacientes.stream()
+                .filter(p -> {
+                    String nombreNormalizado = eliminarDiacriticos(p.getNombre().toUpperCase());
+                    return String.valueOf(p.getDni()).contains(textoNormalizado) ||
+                            String.valueOf(p.getCuil()).contains(textoNormalizado) ||
+                            nombreNormalizado.contains(textoNormalizado);
+                })
+                .collect(Collectors.toList());
     }
 }
