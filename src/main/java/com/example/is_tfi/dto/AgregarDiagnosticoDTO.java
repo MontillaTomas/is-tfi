@@ -1,13 +1,8 @@
 package com.example.is_tfi.dto;
 
-public class agregarDiagnosticoDTO {
+import lombok.Getter;
+
+@Getter
+public class AgregarDiagnosticoDTO {
     private String nombre;
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
 }
