@@ -23,4 +23,14 @@ public class RecetaDigital {
         return medicamentos;
     }
 
+    public LocalDateTime getFechaHora() {
+        return fechaHora;
+    }
+
+    public Medico getMedico() {
+        return medico;
+    }
+    public void setFechaHora(LocalDateTime fechaHora) {
+        this.fechaHora = fechaHora;
+    }
 }

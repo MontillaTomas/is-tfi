@@ -28,6 +28,21 @@ public class Paciente extends Persona {
     }
 
 
+    public ObraSocial getObraSocial() {
+        return obraSocial;
+    }
+
+    public int getNumeroAfiliadoObraSocial() {
+        return numeroAfiliadoObraSocial;
+    }
+
+    public HistoriaClinica getHistoriaClinica() {
+        return historiaClinica;
+    }
+
+    public void setHistoriaClinica(HistoriaClinica historiaClinica) {
+        this.historiaClinica = historiaClinica;
+    }
 
     public void agregarDiagnostico(String diagnostico) {
         // La responsabilidad de validar el diagnóstico se la da al servicio

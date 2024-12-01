@@ -24,4 +24,28 @@ public class Persona {
     public Long getDni() {
         return dni;
     }
+
+    public Long getCuil() {
+        return cuil;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public LocalDate getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public Direccion getDireccion() {
+        return direccion;
+    }
 }

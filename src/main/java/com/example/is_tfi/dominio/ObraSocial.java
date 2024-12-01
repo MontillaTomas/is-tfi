@@ -10,4 +10,16 @@ public class ObraSocial {
         this.denominacion = denominacion;
         this.sigla = sigla;
     }
+
+    public int getCodigo() {
+        return codigo;
+    }
+
+    public String getDenominacion() {
+        return denominacion;
+    }
+
+    public String getSigla() {
+        return sigla;
+    }
 }

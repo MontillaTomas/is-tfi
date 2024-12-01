@@ -19,4 +19,12 @@ public class Medico extends Persona {
         this.matricula = matricula;
         this.especialidad = especialidad;
     }
+
+    public int getMatricula() {
+        return matricula;
+    }
+
+    public String getEspecialidad() {
+        return especialidad;
+    }
 }
