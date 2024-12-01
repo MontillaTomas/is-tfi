@@ -3,8 +3,12 @@ package com.example.is_tfi.controlador;
 import com.example.is_tfi.dominio.Direccion;
 import com.example.is_tfi.dominio.Medico;
 import com.example.is_tfi.dominio.Paciente;
-import com.example.is_tfi.dto.agregarDiagnosticoDTO;
-import com.example.is_tfi.dto.agregarEvolucionDTO;
+import com.example.is_tfi.dto.CrearPacienteDTO;
+import com.example.is_tfi.dto.PacienteDTO;
+import com.example.is_tfi.dto.AgregarDiagnosticoDTO;
+import com.example.is_tfi.dto.AgregarEvolucionDTO;
+import com.example.is_tfi.dto.mapper.CrearPacienteMapper;
+import com.example.is_tfi.dto.mapper.PacienteMapper;
 import com.example.is_tfi.repositorio.impl.RepositorioDiagnosticoImpl;
 import com.example.is_tfi.repositorio.impl.RepositorioPacienteImpl;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +20,8 @@ import java.time.LocalDate;
 public class ControladorClinica {
     private final RepositorioPacienteImpl repositorioPaciente = new RepositorioPacienteImpl();
     private final RepositorioDiagnosticoImpl repositorioDiagnostico = new RepositorioDiagnosticoImpl();
+    private final PacienteMapper pacienteMapper = new PacienteMapper();
+    private final CrearPacienteMapper crearPacienteMapper = new CrearPacienteMapper();
 
     // Por ahora se instancia un objeto medico
     // Cuando se implemente la autenticacion se debera obtener el medico logueado
@@ -29,17 +35,32 @@ public class ControladorClinica {
             123456,
             "Clinico");
 
+    @PostMapping("pacientes")
+    public PacienteDTO crearPaciente(@RequestBody  CrearPacienteDTO dto) {
+        repositorioPaciente.buscarPacientePorDni(dto.getDni()).ifPresent(paciente -> {
+            throw new RuntimeException("Ya existe un paciente con ese DNI");
+        });
+        repositorioPaciente.buscarPacientePorCuil(dto.getCuil()).ifPresent(paciente -> {
+            throw new RuntimeException("Ya existe un paciente con ese CUIL");
+        });
+        Paciente paciente = crearPacienteMapper.toEntity(dto);
+        repositorioPaciente.guardarPaciente(paciente);
+        return pacienteMapper.toDto(paciente);
+    }
+
     @PostMapping("pacientes/{dniPaciente}/diagnosticos")
-    public void agregarDiagnostico(@PathVariable Long dniPaciente, @RequestBody agregarDiagnosticoDTO diagnostico) {
+    public PacienteDTO agregarDiagnostico(@PathVariable Long dniPaciente, @RequestBody AgregarDiagnosticoDTO diagnostico) {
         // El controlador tiene la responsabilidad de validar que el diagnostico exista o sea valido
         repositorioDiagnostico.buscarDiagnosticoPorNombre(diagnostico.getNombre()).orElseThrow(() -> new RuntimeException("Diagnostico no encontrado"));
         Paciente paciente = repositorioPaciente.buscarPacientePorDni(dniPaciente).orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
         paciente.agregarDiagnostico(diagnostico.getNombre());
+        return pacienteMapper.toDto(paciente);
     }
 
     @PostMapping("pacientes/{dniPaciente}/diagnosticos/{diagnostico}/evoluciones")
-    public void agregarEvolucion(@PathVariable Long dniPaciente, @PathVariable String diagnostico, @RequestBody agregarEvolucionDTO evolucion) {
+    public PacienteDTO agregarEvolucion(@PathVariable Long dniPaciente, @PathVariable String diagnostico, @RequestBody AgregarEvolucionDTO evolucion) {
         Paciente paciente = repositorioPaciente.buscarPacientePorDni(dniPaciente).orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
         paciente.agregarEvolucion(diagnostico, evolucion.getInforme(), medico);
+        return pacienteMapper.toDto(paciente);
     }
 }
