@@ -10,4 +10,16 @@ public class Medicamento {
         this.descripcion = descripcion;
         this.formato = formato;
     }
+
+    public int getCodigo() {
+        return codigo;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public String getFormato() {
+        return formato;
+    }
 }

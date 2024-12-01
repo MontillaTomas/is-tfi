@@ -44,6 +44,14 @@ public class Evolucion {
         return medico;
     }
 
+    public void setRecetasDigitales(Map<Long, RecetaDigital> recetasDigitales) {
+        this.recetasDigitales = recetasDigitales;
+    }
+
+    public void setPedidosLaboratorio(Map<Long, PedidoLaboratorio> pedidosLaboratorio) {
+        this.pedidosLaboratorio = pedidosLaboratorio;
+    }
+
     public void crearRecetaDigital(List<Medicamento> medicamentos, Medico medico) {
         recetasDigitales.put(recetasDigitales.size() + 1L, new RecetaDigital(medicamentos, medico));
     }

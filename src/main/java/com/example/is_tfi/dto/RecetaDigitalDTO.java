@@ -8,11 +8,9 @@ import java.util.List;
 
 @Getter
 @Setter
-public class EvolucionDTO {
+public class RecetaDigitalDTO {
     private Long id;
-    private String informe;
-    private MedicoDTO medico;
+    private List<MedicamentoDTO> medicamentos;
     private LocalDateTime fechaHora;
-    private List<RecetaDigitalDTO> recetasDigitales;
-    private List<PedidoLaboratorioDTO> pedidosLaboratorio;
+    private MedicoDTO medico;
 }
