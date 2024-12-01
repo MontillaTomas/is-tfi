@@ -1,13 +1,13 @@
 package com.example.is_tfi.controlador;
 
 import com.example.is_tfi.dominio.Direccion;
+import com.example.is_tfi.dominio.Medicamento;
 import com.example.is_tfi.dominio.Medico;
 import com.example.is_tfi.dominio.Paciente;
-import com.example.is_tfi.dto.CrearPacienteDTO;
-import com.example.is_tfi.dto.PacienteDTO;
-import com.example.is_tfi.dto.AgregarDiagnosticoDTO;
-import com.example.is_tfi.dto.AgregarEvolucionDTO;
+import com.example.is_tfi.dto.*;
 import com.example.is_tfi.dto.mapper.CrearPacienteMapper;
+import com.example.is_tfi.dto.mapper.CrearPedidoLaboratorioDTO;
+import com.example.is_tfi.dto.mapper.MedicamentoMapper;
 import com.example.is_tfi.dto.mapper.PacienteMapper;
 import com.example.is_tfi.repositorio.impl.RepositorioDiagnosticoImpl;
 import com.example.is_tfi.repositorio.impl.RepositorioPacienteImpl;
@@ -23,6 +23,7 @@ public class ControladorClinica {
     private final RepositorioDiagnosticoImpl repositorioDiagnostico = new RepositorioDiagnosticoImpl();
     private final PacienteMapper pacienteMapper = new PacienteMapper();
     private final CrearPacienteMapper crearPacienteMapper = new CrearPacienteMapper();
+    private final MedicamentoMapper medicamentoMapper = new MedicamentoMapper();
 
     // Por ahora se instancia un objeto medico
     // Cuando se implemente la autenticacion se debera obtener el medico logueado
@@ -79,6 +80,28 @@ public class ControladorClinica {
     public PacienteDTO agregarEvolucion(@PathVariable Long dniPaciente, @PathVariable String diagnostico, @RequestBody AgregarEvolucionDTO evolucion) {
         Paciente paciente = repositorioPaciente.buscarPacientePorDni(dniPaciente).orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
         paciente.agregarEvolucion(diagnostico, evolucion.getInforme(), medico);
+        return pacienteMapper.toDto(paciente);
+    }
+
+    @PostMapping("pacientes/{dniPaciente}/diagnosticos/{diagnostico}/evoluciones/{idEvolucion}/recetas-digitales")
+    public PacienteDTO crearRecetaDigital(
+            @PathVariable Long dniPaciente,
+            @PathVariable String diagnostico,
+            @PathVariable Long idEvolucion,
+            @RequestBody List<MedicamentoDTO> medicamentos) {
+        Paciente paciente = repositorioPaciente.buscarPacientePorDni(dniPaciente).orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
+        paciente.crearRecetaDigital(diagnostico, idEvolucion, medicamentoMapper.toEntity(medicamentos), medico);
+        return pacienteMapper.toDto(paciente);
+    }
+
+    @PostMapping("pacientes/{dniPaciente}/diagnosticos/{diagnostico}/evoluciones/{idEvolucion}/pedidos-laboratorio")
+    public PacienteDTO crearPedidoLaboratorio(
+            @PathVariable Long dniPaciente,
+            @PathVariable String diagnostico,
+            @PathVariable Long idEvolucion,
+            @RequestBody CrearPedidoLaboratorioDTO dto) {
+        Paciente paciente = repositorioPaciente.buscarPacientePorDni(dniPaciente).orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
+        paciente.crearPedidoLaboratorio(diagnostico, idEvolucion, dto.getTexto(), medico);
         return pacienteMapper.toDto(paciente);
     }
 }
