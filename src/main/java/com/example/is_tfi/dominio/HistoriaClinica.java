@@ -14,6 +14,10 @@ public class HistoriaClinica {
         return diagnosticos;
     }
 
+    public void setDiagnosticos(List<Diagnostico> diagnosticos) {
+        this.diagnosticos = diagnosticos;
+    }
+
     public void agregarDiagnostico(String diagnostico) {
         for (Diagnostico d : diagnosticos) {
             if(d.getNombre().equals(diagnostico)) {

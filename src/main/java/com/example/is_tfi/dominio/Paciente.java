@@ -40,6 +40,10 @@ public class Paciente extends Persona {
         return historiaClinica;
     }
 
+    public void setHistoriaClinica(HistoriaClinica historiaClinica) {
+        this.historiaClinica = historiaClinica;
+    }
+
     public void agregarDiagnostico(String diagnostico) {
         // La responsabilidad de validar el diagnóstico se la da al servicio
         historiaClinica.agregarDiagnostico(diagnostico);
