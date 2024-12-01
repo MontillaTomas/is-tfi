@@ -70,4 +70,9 @@ public class RepositorioPacienteImpl implements RepositorioPaciente {
                 .filter(paciente -> Objects.equals(paciente.getCuil(), cuil))
                 .findFirst();
     }
+
+    @Override
+    public List<Paciente> obtenerPacientes() {
+        return this.pacientes;
+    }
 }

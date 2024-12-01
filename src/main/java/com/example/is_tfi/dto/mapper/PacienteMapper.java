@@ -3,6 +3,8 @@ package com.example.is_tfi.dto.mapper;
 import com.example.is_tfi.dominio.Paciente;
 import com.example.is_tfi.dto.PacienteDTO;
 
+import java.util.List;
+
 public class PacienteMapper implements EntidadMapper<Paciente, PacienteDTO> {
     private final HistoriaClinicaMapper historiaClinicaMapper;
     private final DireccionMapper direccionMapper;
@@ -51,5 +53,9 @@ public class PacienteMapper implements EntidadMapper<Paciente, PacienteDTO> {
         pacienteDTO.setHistoriaClinica(historiaClinicaMapper.toDto(entidad.getHistoriaClinica()));
 
         return pacienteDTO;
+    }
+
+    public List<PacienteDTO> toDto(List<Paciente> entidades) {
+        return entidades.stream().map(this::toDto).toList();
     }
 }
