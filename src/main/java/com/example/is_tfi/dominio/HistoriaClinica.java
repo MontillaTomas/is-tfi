@@ -1,5 +1,7 @@
 package com.example.is_tfi.dominio;
 
+import com.example.is_tfi.excepciones.PacienteYaPoseeDiagnosticoExcepcion;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +23,7 @@ public class HistoriaClinica {
     public void agregarDiagnostico(String diagnostico) {
         for (Diagnostico d : diagnosticos) {
             if(d.getNombre().equals(diagnostico)) {
-                throw new RuntimeException("El paciente ya posee este diagnostico");
+                throw new PacienteYaPoseeDiagnosticoExcepcion("El paciente ya posee este diagnostico");
             }
         }
         diagnosticos.add(new Diagnostico(diagnostico));
