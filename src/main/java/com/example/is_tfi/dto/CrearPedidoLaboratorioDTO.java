@@ -1,4 +1,4 @@
-package com.example.is_tfi.dto.mapper;
+package com.example.is_tfi.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

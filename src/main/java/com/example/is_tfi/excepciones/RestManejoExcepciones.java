@@ -55,15 +55,15 @@ public class RestManejoExcepciones {
         return new ResponseEntity<>(excepcion.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(DNIenUsoExcepcion.class)
+    @ExceptionHandler(DniEnUsoExcepcion.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ResponseEntity<String> dnienUso(DNIenUsoExcepcion excepcion) {
+    public ResponseEntity<String> dnienUso(DniEnUsoExcepcion excepcion) {
         return new ResponseEntity<>(excepcion.getMessage(), HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler(CUILenUsoExcepcion.class)
+    @ExceptionHandler(CuilEnUsoExcepcion.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ResponseEntity<String> cuilenUso(CUILenUsoExcepcion excepcion) {
+    public ResponseEntity<String> cuilenUso(CuilEnUsoExcepcion excepcion) {
         return new ResponseEntity<>(excepcion.getMessage(), HttpStatus.CONFLICT);
     }
 

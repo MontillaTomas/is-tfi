@@ -5,11 +5,11 @@ import com.example.is_tfi.dominio.Medico;
 import com.example.is_tfi.dominio.Paciente;
 import com.example.is_tfi.dto.*;
 import com.example.is_tfi.dto.mapper.CrearPacienteMapper;
-import com.example.is_tfi.dto.mapper.CrearPedidoLaboratorioDTO;
+import com.example.is_tfi.dto.CrearPedidoLaboratorioDTO;
 import com.example.is_tfi.dto.mapper.MedicamentoMapper;
 import com.example.is_tfi.dto.mapper.PacienteMapper;
-import com.example.is_tfi.excepciones.CUILenUsoExcepcion;
-import com.example.is_tfi.excepciones.DNIenUsoExcepcion;
+import com.example.is_tfi.excepciones.CuilEnUsoExcepcion;
+import com.example.is_tfi.excepciones.DniEnUsoExcepcion;
 import com.example.is_tfi.excepciones.DiagnosticoNoEncontradoExcepcion;
 import com.example.is_tfi.excepciones.PacienteNoEncontradoExcepcion;
 import com.example.is_tfi.repositorio.impl.RepositorioDiagnosticoImpl;
@@ -59,12 +59,12 @@ public class ControladorClinica {
     }
 
     @PostMapping("pacientes")
-    public PacienteDTO crearPaciente(@Valid @RequestBody  CrearPacienteDTO dto) throws DNIenUsoExcepcion, CUILenUsoExcepcion {
+    public PacienteDTO crearPaciente(@Valid @RequestBody  CrearPacienteDTO dto) throws DniEnUsoExcepcion, CuilEnUsoExcepcion {
         repositorioPaciente.buscarPacientePorDni(dto.getDni()).ifPresent(paciente -> {
-            throw new DNIenUsoExcepcion("Ya existe un paciente con ese DNI");
+            throw new DniEnUsoExcepcion("Ya existe un paciente con ese DNI");
         });
         repositorioPaciente.buscarPacientePorCuil(dto.getCuil()).ifPresent(paciente -> {
-            throw new CUILenUsoExcepcion("Ya existe un paciente con ese CUIL");
+            throw new CuilEnUsoExcepcion("Ya existe un paciente con ese CUIL");
         });
         Paciente paciente = crearPacienteMapper.toEntity(dto);
         repositorioPaciente.guardarPaciente(paciente);
