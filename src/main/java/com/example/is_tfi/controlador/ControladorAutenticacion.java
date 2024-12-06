@@ -8,6 +8,7 @@ import com.example.is_tfi.dto.MedicoDTO;
 import com.example.is_tfi.dto.mapper.MedicoMapper;
 import com.example.is_tfi.servicio.AuthenticationService;
 import com.example.is_tfi.servicio.JwtService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,7 +29,7 @@ public class ControladorAutenticacion {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AutenticacionRespuestaDTO> autenticar(@RequestBody AutenticacionPeticionDTO peticion) {
+    public ResponseEntity<AutenticacionRespuestaDTO> autenticar(@Valid @RequestBody AutenticacionPeticionDTO peticion) {
         Medico medico = authenticationService.authenticate(peticion);
         String token = jwtService.generateToken(Map.of("matriculaMedico", medico.getMatricula()), medico.getUsuario());
         AutenticacionRespuestaDTO respuesta = new AutenticacionRespuestaDTO(token, jwtService.getExpirationTime());
