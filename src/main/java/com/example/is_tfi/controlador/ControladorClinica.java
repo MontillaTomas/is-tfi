@@ -1,44 +1,49 @@
 package com.example.is_tfi.controlador;
 
-import com.example.is_tfi.dominio.Direccion;
 import com.example.is_tfi.dominio.Medico;
 import com.example.is_tfi.dominio.Paciente;
 import com.example.is_tfi.dto.*;
 import com.example.is_tfi.dto.CrearPedidoLaboratorioDTO;
 import com.example.is_tfi.dto.mapper.MedicamentoMapper;
 import com.example.is_tfi.dto.mapper.PacienteMapper;
-import com.example.is_tfi.excepciones.CuilEnUsoExcepcion;
-import com.example.is_tfi.excepciones.DniEnUsoExcepcion;
-import com.example.is_tfi.excepciones.DiagnosticoNoEncontradoExcepcion;
-import com.example.is_tfi.excepciones.PacienteNoEncontradoExcepcion;
+import com.example.is_tfi.excepciones.*;
+import com.example.is_tfi.repositorio.RepositorioDiagnostico;
+import com.example.is_tfi.repositorio.RepositorioMedico;
+import com.example.is_tfi.repositorio.RepositorioPaciente;
 import com.example.is_tfi.repositorio.impl.RepositorioDiagnosticoImpl;
 import com.example.is_tfi.repositorio.impl.RepositorioMedicoImpl;
 import com.example.is_tfi.repositorio.impl.RepositorioPacienteImpl;
+import com.example.is_tfi.servicio.JwtService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
 public class ControladorClinica {
-    private final RepositorioPacienteImpl repositorioPaciente = new RepositorioPacienteImpl();
-    private final RepositorioDiagnosticoImpl repositorioDiagnostico = new RepositorioDiagnosticoImpl();
-    private final PacienteMapper pacienteMapper = new PacienteMapper();
-    private final MedicamentoMapper medicamentoMapper = new MedicamentoMapper();
+    private final RepositorioPaciente repositorioPaciente;
+    private final RepositorioDiagnostico repositorioDiagnostico;
+    private final RepositorioMedico repositorioMedico;
+    private final PacienteMapper pacienteMapper;
+    private final MedicamentoMapper medicamentoMapper;
+    private final JwtService jwtService;
 
-    // Por ahora se instancia un objeto medico
-    // Cuando se implemente la autenticacion se debera obtener el medico logueado
-    private final Medico medico = new Medico(44747797L,
-            20447477972L,
-            "Dr House",
-            LocalDate.of(2003, 4, 2),
-            "doctor.house@gmail.com",
-            "+123123123",
-            new Direccion("Calle Falsa", 123, "1234", "Springfield"),
-            123456,
-            "Clinico");
+    public ControladorClinica(JwtService jwtService) {
+        this.repositorioPaciente = new RepositorioPacienteImpl();
+        this.repositorioDiagnostico = new RepositorioDiagnosticoImpl();
+        this.repositorioMedico = new RepositorioMedicoImpl();
+        this.pacienteMapper = new PacienteMapper();
+        this.medicamentoMapper = new MedicamentoMapper();
+        this.jwtService = jwtService;
+    }
+
+    private Medico obtenerMedicoLogueado(String headerAutorizacion) {
+        String token = headerAutorizacion.substring(7);
+        int matricula = jwtService.extraerMatriculaMedico(token);
+        return repositorioMedico.buscarMedicoPorMatricula(matricula)
+                .orElseThrow(() -> new MedicoNoEncontradoExcepcion("Medico no encontrado"));
+    }
 
     @GetMapping("pacientes/{dni}")
     public PacienteDTO obtenerPaciente(@PathVariable Long dni) throws PacienteNoEncontradoExcepcion {
@@ -80,9 +85,14 @@ public class ControladorClinica {
     }
 
     @PostMapping("pacientes/{dniPaciente}/diagnosticos/{diagnostico}/evoluciones")
-    public PacienteDTO agregarEvolucion(@PathVariable Long dniPaciente, @PathVariable String diagnostico, @Valid @RequestBody AgregarEvolucionDTO evolucion) throws PacienteNoEncontradoExcepcion{
+    public PacienteDTO agregarEvolucion(
+        @PathVariable Long dniPaciente,
+        @PathVariable String diagnostico,
+        @Valid @RequestBody AgregarEvolucionDTO evolucion,
+        @RequestHeader("Authorization") String headerAutorizacion) throws PacienteNoEncontradoExcepcion{
         Paciente paciente = repositorioPaciente.buscarPacientePorDni(dniPaciente).orElseThrow(() -> new PacienteNoEncontradoExcepcion("Paciente no encontrado"));
-        paciente.agregarEvolucion(diagnostico, evolucion.getInforme(), medico);
+        Medico medicoLogueado = obtenerMedicoLogueado(headerAutorizacion);
+        paciente.agregarEvolucion(diagnostico, evolucion.getInforme(), medicoLogueado);
         return pacienteMapper.toDto(paciente);
     }
 
@@ -91,9 +101,11 @@ public class ControladorClinica {
             @PathVariable Long dniPaciente,
             @PathVariable String diagnostico,
             @PathVariable Long idEvolucion,
-            @Valid @RequestBody List<@Valid MedicamentoDTO> medicamentos) throws PacienteNoEncontradoExcepcion{
+            @Valid @RequestBody List<@Valid MedicamentoDTO> medicamentos,
+            @RequestHeader("Authorization") String headerAutorizacion) throws PacienteNoEncontradoExcepcion{
         Paciente paciente = repositorioPaciente.buscarPacientePorDni(dniPaciente).orElseThrow(() -> new PacienteNoEncontradoExcepcion("Paciente no encontrado"));
-        paciente.crearRecetaDigital(diagnostico, idEvolucion, medicamentoMapper.toEntity(medicamentos), medico);
+        Medico medicoLogueado = obtenerMedicoLogueado(headerAutorizacion);
+        paciente.crearRecetaDigital(diagnostico, idEvolucion, medicamentoMapper.toEntity(medicamentos), medicoLogueado);
         return pacienteMapper.toDto(paciente);
     }
 
@@ -102,9 +114,11 @@ public class ControladorClinica {
             @PathVariable Long dniPaciente,
             @PathVariable String diagnostico,
             @PathVariable Long idEvolucion,
-            @Valid @RequestBody CrearPedidoLaboratorioDTO dto) throws PacienteNoEncontradoExcepcion {
+            @Valid @RequestBody CrearPedidoLaboratorioDTO dto,
+            @RequestHeader("Authorization") String headerAutorizacion) throws PacienteNoEncontradoExcepcion {
         Paciente paciente = repositorioPaciente.buscarPacientePorDni(dniPaciente).orElseThrow(() -> new PacienteNoEncontradoExcepcion("Paciente no encontrado"));
-        paciente.crearPedidoLaboratorio(diagnostico, idEvolucion, dto.getTexto(), medico);
+        Medico medicoLogueado = obtenerMedicoLogueado(headerAutorizacion);
+        paciente.crearPedidoLaboratorio(diagnostico, idEvolucion, dto.getTexto(), medicoLogueado);
         return pacienteMapper.toDto(paciente);
     }
 }

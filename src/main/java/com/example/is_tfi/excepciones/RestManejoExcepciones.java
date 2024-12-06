@@ -72,4 +72,10 @@ public class RestManejoExcepciones {
     public ResponseEntity<String> usuarioNoEncontrado(UsuarioNoEncontradoExcepcion excepcion) {
         return new ResponseEntity<>(excepcion.getMessage(), HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(MedicoNoEncontradoExcepcion.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<String> medicoNoEncontrado(MedicoNoEncontradoExcepcion excepcion) {
+        return new ResponseEntity<>(excepcion.getMessage(), HttpStatus.NOT_FOUND);
+    }
 }
