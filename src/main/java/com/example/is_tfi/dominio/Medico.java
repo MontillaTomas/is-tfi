@@ -6,6 +6,8 @@ public class Medico extends Persona {
     private int matricula;
     private String especialidad;
 
+    private Usuario usuario;
+
     public Medico(Long dni,
                   Long cuil,
                   String nombre,
@@ -26,5 +28,13 @@ public class Medico extends Persona {
 
     public String getEspecialidad() {
         return especialidad;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }

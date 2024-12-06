@@ -32,6 +32,10 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
+    public int extraerMatriculaMedico(String token) {
+        return extractClaim(token, claims -> (int) claims.get("matriculaMedico"));
+    }
+
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
     }
