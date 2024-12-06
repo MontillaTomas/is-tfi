@@ -1,6 +1,7 @@
 package com.example.is_tfi.dto.mapper;
 
 import com.example.is_tfi.dominio.Paciente;
+import com.example.is_tfi.dto.CrearPacienteDTO;
 import com.example.is_tfi.dto.PacienteDTO;
 
 import java.util.List;
@@ -34,6 +35,21 @@ public class PacienteMapper implements EntidadMapper<Paciente, PacienteDTO> {
         paciente.setHistoriaClinica(historiaClinicaMapper.toEntity(dto.getHistoriaClinica()));
 
         return paciente;
+    }
+    public Paciente toEntity(CrearPacienteDTO dto) {
+        if (dto == null) return null;
+
+        return new Paciente(
+                dto.getDni(),
+                dto.getCuil(),
+                dto.getNombre(),
+                dto.getFechaNacimiento(),
+                dto.getEmail(),
+                dto.getTelefono(),
+                obraSocialMapper.toEntity(dto.getObraSocial()),
+                dto.getNumeroAfiliadoObraSocial(),
+                direccionMapper.toEntity(dto.getDireccion())
+        );
     }
 
     @Override

@@ -4,7 +4,6 @@ import com.example.is_tfi.dominio.Direccion;
 import com.example.is_tfi.dominio.Medico;
 import com.example.is_tfi.dominio.Paciente;
 import com.example.is_tfi.dto.*;
-import com.example.is_tfi.dto.mapper.CrearPacienteMapper;
 import com.example.is_tfi.dto.CrearPedidoLaboratorioDTO;
 import com.example.is_tfi.dto.mapper.MedicamentoMapper;
 import com.example.is_tfi.dto.mapper.PacienteMapper;
@@ -13,6 +12,7 @@ import com.example.is_tfi.excepciones.DniEnUsoExcepcion;
 import com.example.is_tfi.excepciones.DiagnosticoNoEncontradoExcepcion;
 import com.example.is_tfi.excepciones.PacienteNoEncontradoExcepcion;
 import com.example.is_tfi.repositorio.impl.RepositorioDiagnosticoImpl;
+import com.example.is_tfi.repositorio.impl.RepositorioMedicoImpl;
 import com.example.is_tfi.repositorio.impl.RepositorioPacienteImpl;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +26,6 @@ public class ControladorClinica {
     private final RepositorioPacienteImpl repositorioPaciente = new RepositorioPacienteImpl();
     private final RepositorioDiagnosticoImpl repositorioDiagnostico = new RepositorioDiagnosticoImpl();
     private final PacienteMapper pacienteMapper = new PacienteMapper();
-    private final CrearPacienteMapper crearPacienteMapper = new CrearPacienteMapper();
     private final MedicamentoMapper medicamentoMapper = new MedicamentoMapper();
 
     // Por ahora se instancia un objeto medico
@@ -66,7 +65,7 @@ public class ControladorClinica {
         repositorioPaciente.buscarPacientePorCuil(dto.getCuil()).ifPresent(paciente -> {
             throw new CuilEnUsoExcepcion("Ya existe un paciente con ese CUIL");
         });
-        Paciente paciente = crearPacienteMapper.toEntity(dto);
+        Paciente paciente = pacienteMapper.toEntity(dto);
         repositorioPaciente.guardarPaciente(paciente);
         return pacienteMapper.toDto(paciente);
     }
