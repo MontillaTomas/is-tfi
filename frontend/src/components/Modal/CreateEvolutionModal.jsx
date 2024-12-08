@@ -1,9 +1,13 @@
 import React, { useState } from 'react'
+import usePaciente from '../../hooks/usePaciente'
 
-function CreateEvolutionModal({ isOpen, onClose, patientId }) {
+function CreateEvolutionModal({ isOpen, onClose, selectedDiagnosis, selectedPatient }) {
   const [evolutionData, setEvolutionData] = useState({
     description: '',
   })
+
+  const { createEvolution } = usePaciente() 
+
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -13,10 +17,11 @@ function CreateEvolutionModal({ isOpen, onClose, patientId }) {
     }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
-    console.log('Datos de la evolución:', { patientId, ...evolutionData })
+    const evolucion = await createEvolution(selectedPatient.dni,selectedDiagnosis, evolutionData.description);
+    console.log(evolucion);
 
     setEvolutionData({ description: '' })
     onClose()

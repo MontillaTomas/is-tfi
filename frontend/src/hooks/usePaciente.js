@@ -34,11 +34,30 @@ const usePaciente = () => {
         }
     }
 
+    const createEvolution = async(dni, diagnostico, informe)=>{
+        setLoading(true);
+        setError(null)
+        try {
+            
+            const data = await pacienteService.createEvolution(dni, diagnostico, informe );
+            await getPaciente(dni)
+            console.log(data);
+            return data
+
+        } catch (error) {
+            setError(error.message);
+        }finally{
+            setLoading(false);
+        }
+    }
+
+
 
     return {
         error,
         loading,
         getPaciente, 
+        createEvolution
     }
 
 }

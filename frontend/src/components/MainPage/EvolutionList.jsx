@@ -1,9 +1,10 @@
 import React, {useState} from 'react'
 import CreateEvolutionModal from '../Modal/CreateEvolutionModal'
 
-function EvolutionList({ diagnosticos, selectedDiagnosis  }) {
+function EvolutionList({ diagnosticos, selectedDiagnosis, selectedPatient  }) {
 
   const [isModalOpen, setIsModalOpen] = useState(false)
+  
 
   const evoluciones = diagnosticos
     .flatMap((diagnostico) =>
@@ -30,7 +31,7 @@ function EvolutionList({ diagnosticos, selectedDiagnosis  }) {
             Agregar Evolución
           </button>
         )}
-        <CreateEvolutionModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}/>
+        <CreateEvolutionModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} selectedDiagnosis={selectedDiagnosis} selectedPatient={selectedPatient}/>
       </div>
     <ul className="space-y-4">
       {evoluciones.map((evolucion, id) => (

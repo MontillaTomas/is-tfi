@@ -18,6 +18,27 @@ const getPaciente = async (dni) => {
     return data
 }
 
+const createEvolution = async (dni,diagnostico,informe) => {
+
+    const token = Cookie.get("tokenAcceso");
+    const response = await fetch(`${API_URL}${dni}/diagnosticos/${diagnostico}/evoluciones`, {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+        },
+        body:JSON.stringify({
+            'informe':informe,
+        })
+    });
+    const data = await response.json();
+    if (!response.ok) {
+
+        throw new Error(`${data.message}`);
+    }
+    return data
+}
+
 export const pacienteService = {
-    getPaciente,
+    getPaciente,createEvolution
 }

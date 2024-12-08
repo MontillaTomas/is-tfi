@@ -26,7 +26,7 @@ function MainPage() {
               <PatientInfo patient={selectedPatient} />
               <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
                 <DiagnosisList diagnosticos={selectedPatient.historiaClinica.diagnosticos} onSelectDiagnosis={setSelectedDiagnosis}/>
-                <EvolutionList diagnosticos={selectedPatient.historiaClinica.diagnosticos} selectedDiagnosis={selectedDiagnosis} />
+                <EvolutionList diagnosticos={selectedPatient.historiaClinica.diagnosticos} selectedDiagnosis={selectedDiagnosis} selectedPatient={selectedPatient} />
               </div>
               <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
                 <PrescriptionBox patientId={selectedPatient} />
