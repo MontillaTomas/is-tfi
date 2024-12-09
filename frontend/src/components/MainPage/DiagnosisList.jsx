@@ -1,11 +1,9 @@
 import React, {useState, useEffect} from 'react'
 import CreateDiagnosisModal from '../Modal/CreateDiagnosisModal'
-import usePaciente from '../../hooks/usePaciente'
 
-function DiagnosisList({ diagnosticos, onSelectDiagnosis, selectedPatient, setDiagnosisAdded, reloadPatientData}) {
+function DiagnosisList({ diagnosticos, selectedDiagnosis, onSelectDiagnosis, selectedPatient, setDiagnosisAdded, reloadPatientData}) {
 
   const [isModalOpen, setIsModalOpen] = useState(false)
-
 
   return (
     <div className="bg-white shadow-md rounded-lg p-6">
@@ -26,17 +24,18 @@ function DiagnosisList({ diagnosticos, onSelectDiagnosis, selectedPatient, setDi
         />
       </div>
       <ul className="space-y-4">
-        {diagnosticos.map((diagnosis, id) => (
+        {diagnosticos.length > 0 ? diagnosticos.map((diagnosis, id) => (
           <li key={id} className="border-b pb-2 cursor-pointer" onClick={() => onSelectDiagnosis(diagnosis.nombre)}>
             <p className="font-semibold">{diagnosis.nombre}</p>
           </li>
-        ))}
-        <li
-          className="border-b pb-2 cursor-pointer hover:bg-gray-100"
-          onClick={() => onSelectDiagnosis(null)} 
-        >
-          <p className="font-semibold text-gray-500 italic">Mostrar todos</p>
-        </li>
+        )): (
+          <p className="font-semibold">No hay diagnosticos</p>
+        )}
+        {diagnosticos.length > 0 && selectedDiagnosis!=null ? (
+          <li className="border-b pb-2 cursor-pointer hover:bg-gray-100" onClick={() => onSelectDiagnosis(null)} >
+            <p className="font-semibold text-gray-500 italic">Mostrar todas las evoluciones</p>
+          </li>
+        ): <></>}    
       </ul>
     </div>
   )

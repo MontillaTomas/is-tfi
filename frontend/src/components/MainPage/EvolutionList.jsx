@@ -4,7 +4,7 @@ import CreateEvolutionModal from '../Modal/CreateEvolutionModal'
 function EvolutionList({ diagnosticos, selectedDiagnosis, selectedPatient, setEvolutionAdded, reloadPatientData, onSelectEvolution  }) {
 
   const [isModalOpen, setIsModalOpen] = useState(false)
-
+  
   const evoluciones = diagnosticos
     .flatMap((diagnostico) =>
       diagnostico.evoluciones.map((evolucion) => ({
@@ -40,12 +40,14 @@ function EvolutionList({ diagnosticos, selectedDiagnosis, selectedPatient, setEv
         />
       </div>
     <ul className="space-y-4">
-      {evoluciones.map((evolucion, id) => (
+      {evoluciones.length>0 ? evoluciones.map((evolucion, id) => (
         <li key={id} className="border-b pb-2 cursor-pointer" onClick={() => onSelectEvolution(evolucion.informe)}>
           <p className="font-semibold">{evolucion.diagnosticoNombre}</p>
           <p>{evolucion.informe}</p>
         </li>
-      ))}
+      )):
+        <p className="font-semibold">No hay evoluciones realizadas</p>
+      }
     </ul>
   </div>
   )
