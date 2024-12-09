@@ -33,7 +33,7 @@ function MainPage() {
     <div className="min-h-screen bg-gray-100">
       <div className="flex flex-col min-h-screen">
         <Navbar />
-        <main className="flex-grow container mx-auto px-4 py-8">
+        <main className="flex-grow container mx-auto px-10 py-8">
           <PatientSearch onPatientSelect={handlePatientSelect} selectDiagnosis={setSelectedDiagnosis} selectEvolution={setSelectedEvolution}/>
           {selectedPatient && (
             <div className="mt-8">

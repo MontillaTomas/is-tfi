@@ -6,7 +6,6 @@ function PatientSearch({ onPatientSelect, selectDiagnosis, selectEvolution }) {
 
   const { getPaciente } = usePaciente() 
 
-  
   const handleSearch = async (e) => {
     e.preventDefault()
 
