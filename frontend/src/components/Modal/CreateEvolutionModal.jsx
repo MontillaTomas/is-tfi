@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import usePaciente from '../../hooks/usePaciente'
 
-function CreateEvolutionModal({ isOpen, onClose, selectedDiagnosis, selectedPatient }) {
+function CreateEvolutionModal({ isOpen, onClose, selectedDiagnosis, selectedPatient, setEvolutionAdded }) {
   const [evolutionData, setEvolutionData] = useState({
     description: '',
   })
@@ -24,6 +24,7 @@ function CreateEvolutionModal({ isOpen, onClose, selectedDiagnosis, selectedPati
     console.log(evolucion);
 
     setEvolutionData({ description: '' })
+    setEvolutionAdded(true)
     onClose()
   }
 

@@ -1,12 +1,27 @@
-import React, {useState} from 'react'
+import React, { useState, useEffect } from 'react'
 import CreateEvolutionModal from '../Modal/CreateEvolutionModal'
+import usePaciente from '../../hooks/usePaciente'
 
-function EvolutionList({ diagnosticos, selectedDiagnosis, selectedPatient  }) {
+function EvolutionList({ diagnosticos, selectedDiagnosis, selectedPatient, evolutionAdded, setEvolutionAdded  }) {
 
   const [isModalOpen, setIsModalOpen] = useState(false)
-  
+  const [diagnosticosState, setDiagnosticos] = useState(diagnosticos)
 
-  const evoluciones = diagnosticos
+  const { getPaciente } = usePaciente()
+
+  useEffect(() => {
+    if (evolutionAdded) {
+      const reloadPatientData = async () => {
+        const updatedPatient = await getPaciente(selectedPatient.dni)
+ 
+        setDiagnosticos(updatedPatient.historiaClinica.diagnosticos)
+        setEvolutionAdded(false)
+      }
+      reloadPatientData()
+    }
+  }, [evolutionAdded, selectedPatient, getPaciente, setEvolutionAdded])
+
+  const evoluciones = diagnosticosState
     .flatMap((diagnostico) =>
       diagnostico.evoluciones.map((evolucion) => ({
         ...evolucion,
@@ -31,7 +46,12 @@ function EvolutionList({ diagnosticos, selectedDiagnosis, selectedPatient  }) {
             Agregar Evolución
           </button>
         )}
-        <CreateEvolutionModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} selectedDiagnosis={selectedDiagnosis} selectedPatient={selectedPatient}/>
+        <CreateEvolutionModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        selectedDiagnosis={selectedDiagnosis} 
+        selectedPatient={selectedPatient}
+        setEvolutionAdded={setEvolutionAdded}/>
       </div>
     <ul className="space-y-4">
       {evoluciones.map((evolucion, id) => (

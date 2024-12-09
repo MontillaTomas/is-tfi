@@ -10,6 +10,7 @@ import PrescriptionBox from '../components/MainPage/PrescriptionBox'
 function MainPage() {
   const [selectedPatient, setSelectedPatient] = useState(null)
   const [selectedDiagnosis, setSelectedDiagnosis] = useState(null);
+  const [evolutionAdded, setEvolutionAdded] = useState(false);
 
   const handlePatientSelect = (patient) => {
     setSelectedPatient(patient)
@@ -26,7 +27,13 @@ function MainPage() {
               <PatientInfo patient={selectedPatient} />
               <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
                 <DiagnosisList diagnosticos={selectedPatient.historiaClinica.diagnosticos} onSelectDiagnosis={setSelectedDiagnosis}/>
-                <EvolutionList diagnosticos={selectedPatient.historiaClinica.diagnosticos} selectedDiagnosis={selectedDiagnosis} selectedPatient={selectedPatient} />
+                <EvolutionList 
+                  diagnosticos={selectedPatient.historiaClinica.diagnosticos} 
+                  selectedDiagnosis={selectedDiagnosis} 
+                  selectedPatient={selectedPatient} 
+                  evolutionAdded={evolutionAdded}
+                  setEvolutionAdded={setEvolutionAdded}
+                />
               </div>
               <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
                 <PrescriptionBox patientId={selectedPatient} />
