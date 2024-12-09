@@ -11,6 +11,7 @@ function MainPage() {
   const [selectedPatient, setSelectedPatient] = useState(null)
   const [selectedDiagnosis, setSelectedDiagnosis] = useState(null);
   const [evolutionAdded, setEvolutionAdded] = useState(false);
+  const [diagnosisAdded, setDiagnosisAdded] = useState(false);
 
   const handlePatientSelect = (patient) => {
     setSelectedPatient(patient)
@@ -26,7 +27,13 @@ function MainPage() {
             <div className="mt-8">
               <PatientInfo patient={selectedPatient} />
               <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-                <DiagnosisList diagnosticos={selectedPatient.historiaClinica.diagnosticos} onSelectDiagnosis={setSelectedDiagnosis}/>
+                <DiagnosisList 
+                  diagnosticos={selectedPatient.historiaClinica.diagnosticos} 
+                  onSelectDiagnosis={setSelectedDiagnosis}
+                  selectedPatient={selectedPatient} 
+                  diagnosisAdded={diagnosisAdded}
+                  setDiagnosisAdded={setDiagnosisAdded}
+                  />
                 <EvolutionList 
                   diagnosticos={selectedPatient.historiaClinica.diagnosticos} 
                   selectedDiagnosis={selectedDiagnosis} 

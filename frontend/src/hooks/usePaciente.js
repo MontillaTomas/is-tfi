@@ -16,7 +16,6 @@ const usePaciente = () => {
         }
     }
 
-
     const getPaciente = async(dni)=>{
         setLoading(true);
         setError(null)
@@ -40,7 +39,6 @@ const usePaciente = () => {
         try {
             
             const data = await pacienteService.createEvolution(dni, diagnostico, informe );
-            await getPaciente(dni)
             console.log(data);
             return data
 
@@ -51,13 +49,29 @@ const usePaciente = () => {
         }
     }
 
+    const createDiagnosis = async(dni, nombre)=>{
+        setLoading(true);
+        setError(null)
+        console.log(dni,nombre);
+        try {
+            
+            const data = await pacienteService.createDiagnosis(dni, nombre);
+            console.log(data);
+            return data
 
+        } catch (error) {
+            setError(error.message);
+        }finally{
+            setLoading(false);
+        }
+    }
 
     return {
         error,
         loading,
         getPaciente, 
-        createEvolution
+        createEvolution,
+        createDiagnosis
     }
 
 }

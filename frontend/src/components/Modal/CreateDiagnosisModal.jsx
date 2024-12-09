@@ -1,23 +1,24 @@
 import React, { useState, useEffect } from 'react'
+import usePaciente from '../../hooks/usePaciente'
 
 const possibleDiagnoses = [
-  "Hipertensión arterial",
-  "Diabetes tipo 1",
-  "Diabetes tipo 2",
-  "Artritis reumatoide",
-  "Asma",
-  "Migraña",
-  "Depresión",
-  "Ansiedad",
-  "Hipotiroidismo",
-  "Hipertiroidismo"
+  "Diabetes",
+  "Hipertensión",
+  "Covid-19",
+  "Gripe",
+  "Resfrío",
+  "Dengue",
+  "Zika",
+  "Chikungunya"
 ]
 
-function CreateDiagnosisModal({ isOpen, onClose }) {
+function CreateDiagnosisModal({ isOpen, onClose , selectedPatient, setDiagnosisAdded}) {
   const [diagnosisData, setDiagnosisData] = useState({
     name: '',
   })
   const [suggestions, setSuggestions] = useState([])
+
+  const { createDiagnosis } = usePaciente()
 
   useEffect(() => {
     if (diagnosisData.name) {
@@ -46,10 +47,14 @@ function CreateDiagnosisModal({ isOpen, onClose }) {
     setSuggestions([])
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault()
-
+    
+    const diagnostico = await createDiagnosis(selectedPatient.dni, diagnosisData.name);
+    console.log(diagnostico);
+    
     setDiagnosisData({ name: ''})
+    setDiagnosisAdded(true)
     onClose()
   }
 
