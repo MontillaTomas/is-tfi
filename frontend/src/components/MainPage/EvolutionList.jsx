@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import CreateEvolutionModal from '../Modal/CreateEvolutionModal'
-import usePaciente from '../../hooks/usePaciente'
 
-function EvolutionList({ diagnosticos, selectedDiagnosis, selectedPatient, evolutionAdded, setEvolutionAdded, reloadPatientData  }) {
+function EvolutionList({ diagnosticos, selectedDiagnosis, selectedPatient, setEvolutionAdded, reloadPatientData, onSelectEvolution  }) {
 
   const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -42,7 +41,7 @@ function EvolutionList({ diagnosticos, selectedDiagnosis, selectedPatient, evolu
       </div>
     <ul className="space-y-4">
       {evoluciones.map((evolucion, id) => (
-        <li key={id} className="border-b pb-2">
+        <li key={id} className="border-b pb-2 cursor-pointer" onClick={() => onSelectEvolution(evolucion.informe)}>
           <p className="font-semibold">{evolucion.diagnosticoNombre}</p>
           <p>{evolucion.informe}</p>
         </li>

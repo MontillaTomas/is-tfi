@@ -11,6 +11,7 @@ import usePaciente from '../hooks/usePaciente'
 function MainPage() {
   const [selectedPatient, setSelectedPatient] = useState(null)
   const [selectedDiagnosis, setSelectedDiagnosis] = useState(null);
+  const [selectedEvolution, setSelectedEvolution] = useState(null);
   const [evolutionAdded, setEvolutionAdded] = useState(false);
   const [diagnosisAdded, setDiagnosisAdded] = useState(false);
   const { getPaciente } = usePaciente()
@@ -33,7 +34,7 @@ function MainPage() {
       <div className="flex flex-col min-h-screen">
         <Navbar />
         <main className="flex-grow container mx-auto px-4 py-8">
-          <PatientSearch onPatientSelect={handlePatientSelect} clearSelectDiagnosis={setSelectedDiagnosis}/>
+          <PatientSearch onPatientSelect={handlePatientSelect} selectDiagnosis={setSelectedDiagnosis} selectEvolution={setSelectedEvolution}/>
           {selectedPatient && (
             <div className="mt-8">
               <PatientInfo patient={selectedPatient} />
@@ -42,7 +43,6 @@ function MainPage() {
                   diagnosticos={selectedPatient.historiaClinica.diagnosticos} 
                   onSelectDiagnosis={setSelectedDiagnosis}
                   selectedPatient={selectedPatient} 
-                  diagnosisAdded={diagnosisAdded}
                   setDiagnosisAdded={setDiagnosisAdded}
                   reloadPatientData={reloadPatientData}
                   />
@@ -50,15 +50,17 @@ function MainPage() {
                   diagnosticos={selectedPatient.historiaClinica.diagnosticos} 
                   selectedDiagnosis={selectedDiagnosis} 
                   selectedPatient={selectedPatient} 
-                  evolutionAdded={evolutionAdded}
                   setEvolutionAdded={setEvolutionAdded}
                   reloadPatientData={reloadPatientData}
+                  onSelectEvolution={setSelectedEvolution}
                 />
               </div>
-              <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-                <PrescriptionBox patientId={selectedPatient} />
-                <LabOrderBox patientId={selectedPatient} />
-              </div>
+              {selectedEvolution && (
+                <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <PrescriptionBox patientId={selectedPatient} />
+                  <LabOrderBox patientId={selectedPatient} />
+                </div>
+              )}
             </div>
           )}
         </main>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import usePaciente from '../../hooks/usePaciente'
 
-function PatientSearch({ onPatientSelect, clearSelectDiagnosis }) {
+function PatientSearch({ onPatientSelect, selectDiagnosis, selectEvolution }) {
   const [searchTerm, setSearchTerm] = useState('')
 
   const { getPaciente } = usePaciente() 
@@ -13,8 +13,9 @@ function PatientSearch({ onPatientSelect, clearSelectDiagnosis }) {
     const paciente = await getPaciente(searchTerm);
     console.log(paciente);
     
-    onPatientSelect(paciente)
-    clearSelectDiagnosis(null)
+    onPatientSelect(paciente);
+    selectDiagnosis(null);
+    selectEvolution(null);
   }
 
   return (

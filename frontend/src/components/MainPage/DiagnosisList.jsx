@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import CreateDiagnosisModal from '../Modal/CreateDiagnosisModal'
 import usePaciente from '../../hooks/usePaciente'
 
-function DiagnosisList({ diagnosticos, onSelectDiagnosis, selectedPatient, diagnosisAdded ,setDiagnosisAdded, reloadPatientData}) {
+function DiagnosisList({ diagnosticos, onSelectDiagnosis, selectedPatient, setDiagnosisAdded, reloadPatientData}) {
 
   const [isModalOpen, setIsModalOpen] = useState(false)
 
