@@ -2,24 +2,10 @@ import React, {useState, useEffect} from 'react'
 import CreateDiagnosisModal from '../Modal/CreateDiagnosisModal'
 import usePaciente from '../../hooks/usePaciente'
 
-function DiagnosisList({ diagnosticos, onSelectDiagnosis, selectedPatient, diagnosisAdded ,setDiagnosisAdded}) {
+function DiagnosisList({ diagnosticos, onSelectDiagnosis, selectedPatient, diagnosisAdded ,setDiagnosisAdded, reloadPatientData}) {
 
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [diagnosticosState, setDiagnosticos] = useState(diagnosticos)
 
-  const { getPaciente } = usePaciente()
-
-  useEffect(() => {
-    if (diagnosisAdded) {
-      const reloadPatientData = async () => {
-        const updatedPatient = await getPaciente(selectedPatient.dni)
- 
-        setDiagnosticos(updatedPatient.historiaClinica.diagnosticos)
-        setDiagnosisAdded(false)
-      }
-      reloadPatientData()
-    }
-  }, [diagnosisAdded, selectedPatient, getPaciente, setDiagnosisAdded])
 
   return (
     <div className="bg-white shadow-md rounded-lg p-6">
@@ -36,10 +22,11 @@ function DiagnosisList({ diagnosticos, onSelectDiagnosis, selectedPatient, diagn
           onClose={() => setIsModalOpen(false)} 
           selectedPatient={selectedPatient}
           setDiagnosisAdded={setDiagnosisAdded}
+          reloadPatientData={reloadPatientData}
         />
       </div>
       <ul className="space-y-4">
-        {diagnosticosState.map((diagnosis, id) => (
+        {diagnosticos.map((diagnosis, id) => (
           <li key={id} className="border-b pb-2 cursor-pointer" onClick={() => onSelectDiagnosis(diagnosis.nombre)}>
             <p className="font-semibold">{diagnosis.nombre}</p>
           </li>

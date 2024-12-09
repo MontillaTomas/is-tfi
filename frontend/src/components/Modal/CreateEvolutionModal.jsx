@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import usePaciente from '../../hooks/usePaciente'
 
-function CreateEvolutionModal({ isOpen, onClose, selectedDiagnosis, selectedPatient, setEvolutionAdded }) {
+function CreateEvolutionModal({ isOpen, onClose, selectedDiagnosis, selectedPatient, setEvolutionAdded, reloadPatientData }) {
   const [evolutionData, setEvolutionData] = useState({
     description: '',
   })
@@ -25,6 +25,7 @@ function CreateEvolutionModal({ isOpen, onClose, selectedDiagnosis, selectedPati
 
     setEvolutionData({ description: '' })
     setEvolutionAdded(true)
+    await reloadPatientData()
     onClose()
   }
 
@@ -69,6 +70,7 @@ function CreateEvolutionModal({ isOpen, onClose, selectedDiagnosis, selectedPati
           className="absolute top-0 right-0 mt-4 mr-4 text-gray-500 hover:text-gray-800"
         >
         </button>
+        &times;
       </div>
     </div>
   )

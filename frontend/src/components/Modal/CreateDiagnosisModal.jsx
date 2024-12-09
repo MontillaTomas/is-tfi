@@ -12,7 +12,7 @@ const possibleDiagnoses = [
   "Chikungunya"
 ]
 
-function CreateDiagnosisModal({ isOpen, onClose , selectedPatient, setDiagnosisAdded}) {
+function CreateDiagnosisModal({ isOpen, onClose , selectedPatient, setDiagnosisAdded, reloadPatientData }) {
   const [diagnosisData, setDiagnosisData] = useState({
     name: '',
   })
@@ -55,6 +55,7 @@ function CreateDiagnosisModal({ isOpen, onClose , selectedPatient, setDiagnosisA
     
     setDiagnosisData({ name: ''})
     setDiagnosisAdded(true)
+    await reloadPatientData()
     onClose()
   }
 
