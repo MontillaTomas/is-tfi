@@ -5,6 +5,8 @@ import com.example.is_tfi.dto.DiagnosticoDTO;
 import com.example.is_tfi.dto.EvolucionDTO;
 import com.example.is_tfi.excepciones.IdYaEstaEnUsoExcepcion;
 
+import java.util.List;
+
 public class DiagnosticoMapper implements EntidadMapper<Diagnostico, DiagnosticoDTO> {
     private final EvolucionMapper evolucionMapper;
 
@@ -42,5 +44,8 @@ public class DiagnosticoMapper implements EntidadMapper<Diagnostico, Diagnostico
         );
 
         return dto;
+    }
+    public List<DiagnosticoDTO> toDto(List<Diagnostico> entidades) {
+        return entidades.stream().map(this::toDto).toList();
     }
 }

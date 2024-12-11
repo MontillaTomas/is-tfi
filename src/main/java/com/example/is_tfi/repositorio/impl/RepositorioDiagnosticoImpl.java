@@ -1,10 +1,13 @@
 package com.example.is_tfi.repositorio.impl;
 
 import com.example.is_tfi.dominio.Diagnostico;
+import com.example.is_tfi.dominio.Paciente;
 import com.example.is_tfi.repositorio.RepositorioDiagnostico;
 
+import java.text.Normalizer;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 public class RepositorioDiagnosticoImpl implements RepositorioDiagnostico {
     private List<Diagnostico> diagnosticos;
@@ -20,10 +23,27 @@ public class RepositorioDiagnosticoImpl implements RepositorioDiagnostico {
                 new Diagnostico("Chikungunya")
         );
     }
+
+    private String eliminarDiacriticos(String nombre) {
+        if (nombre == null) return null;
+        String textoNormalizado = Normalizer.normalize(nombre, Normalizer.Form.NFD);
+        Pattern patronDiacriticos = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        return patronDiacriticos.matcher(textoNormalizado).replaceAll("");
+    }
+
+    @Override
+    public List<Diagnostico> obtenerDiagnostico() {
+        return this.diagnosticos;
+    }
+
     @Override
     public Optional<Diagnostico> buscarDiagnosticoPorNombre(String nombre) {
+        String textoNormalizado = eliminarDiacriticos(nombre.toUpperCase());
         return this.diagnosticos.stream()
-                .filter(diagnostico -> diagnostico.getNombre().equals(nombre))
-                .findFirst();
+                .filter(p -> {
+                    String nombreNormalizado = eliminarDiacriticos(p.getNombre().toUpperCase());
+                    return nombreNormalizado.contains(textoNormalizado);
+                })
+                .findFirst(); // Encuentra el primer resultado coincidente
     }
 }
