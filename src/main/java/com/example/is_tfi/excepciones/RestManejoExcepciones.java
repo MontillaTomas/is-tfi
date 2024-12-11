@@ -1,5 +1,6 @@
 package com.example.is_tfi.excepciones;
 
+import org.springframework.expression.spel.ast.NullLiteral;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -10,6 +11,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NavigableMap;
 
 @ControllerAdvice
 public class RestManejoExcepciones {
@@ -39,43 +41,78 @@ public class RestManejoExcepciones {
 
     @ExceptionHandler(PacienteYaPoseeDiagnosticoExcepcion.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ResponseEntity<String> pacienteYaPoseeDiagnostico(PacienteYaPoseeDiagnosticoExcepcion excepcion) {
-        return new ResponseEntity<>(excepcion.getMessage(), HttpStatus.CONFLICT);
+    public ResponseEntity<ErrorMessage> pacienteYaPoseeDiagnostico(PacienteYaPoseeDiagnosticoExcepcion excepcion) {
+        ErrorMessage errorMessage = new ErrorMessage(
+                HttpStatus.CONFLICT,
+                excepcion.getMessage(),
+                null
+        );
+        return new ResponseEntity<>(errorMessage, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(PacienteNoEncontradoExcepcion.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<String> pacienteNoEncontrado(PacienteNoEncontradoExcepcion excepcion) {
-        return new ResponseEntity<>(excepcion.getMessage(), HttpStatus.NOT_FOUND);
+    public ResponseEntity<ErrorMessage> pacienteNoEncontrado(PacienteNoEncontradoExcepcion excepcion) {
+        ErrorMessage errorMessage = new ErrorMessage(
+                HttpStatus.NOT_FOUND,
+                excepcion.getMessage(),
+                null
+        );
+        return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(DiagnosticoNoEncontradoExcepcion.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<String> diagnosticoNoEncontrado(DiagnosticoNoEncontradoExcepcion excepcion) {
-        return new ResponseEntity<>(excepcion.getMessage(), HttpStatus.NOT_FOUND);
+    public ResponseEntity<ErrorMessage> diagnosticoNoEncontrado(DiagnosticoNoEncontradoExcepcion excepcion) {
+        ErrorMessage errorMessage = new ErrorMessage(
+                HttpStatus.NOT_FOUND,
+                excepcion.getMessage(),
+                null
+        );
+        return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(DniEnUsoExcepcion.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ResponseEntity<String> dnienUso(DniEnUsoExcepcion excepcion) {
-        return new ResponseEntity<>(excepcion.getMessage(), HttpStatus.CONFLICT);
+    public ResponseEntity<ErrorMessage> dnienUso(DniEnUsoExcepcion excepcion) {
+        ErrorMessage errorMessage = new ErrorMessage(
+                HttpStatus.CONFLICT,
+                excepcion.getMessage(),
+                null
+        );
+        return new ResponseEntity<>(errorMessage, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(CuilEnUsoExcepcion.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ResponseEntity<String> cuilenUso(CuilEnUsoExcepcion excepcion) {
-        return new ResponseEntity<>(excepcion.getMessage(), HttpStatus.CONFLICT);
+    public ResponseEntity<ErrorMessage> cuilenUso(CuilEnUsoExcepcion excepcion) {
+        ErrorMessage errorMessage = new ErrorMessage(
+                HttpStatus.CONFLICT,
+                excepcion.getMessage(),
+                null
+        );
+        return new ResponseEntity<>(errorMessage, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(UsuarioNoEncontradoExcepcion.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<String> usuarioNoEncontrado(UsuarioNoEncontradoExcepcion excepcion) {
-        return new ResponseEntity<>(excepcion.getMessage(), HttpStatus.NOT_FOUND);
+    public ResponseEntity<ErrorMessage> usuarioNoEncontrado(UsuarioNoEncontradoExcepcion excepcion) {
+        ErrorMessage errorMessage = new ErrorMessage(
+                HttpStatus.NOT_FOUND,
+                excepcion.getMessage(),
+                null
+        );
+        return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(MedicoNoEncontradoExcepcion.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<String> medicoNoEncontrado(MedicoNoEncontradoExcepcion excepcion) {
-        return new ResponseEntity<>(excepcion.getMessage(), HttpStatus.NOT_FOUND);
+    public ResponseEntity<ErrorMessage> medicoNoEncontrado(MedicoNoEncontradoExcepcion excepcion) {
+        ErrorMessage errorMessage = new ErrorMessage(
+                HttpStatus.NOT_FOUND,
+                excepcion.getMessage(),
+                null
+        );
+        return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
     }
 }
