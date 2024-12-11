@@ -1,10 +1,22 @@
 import React, { useState, useEffect } from 'react'
 import CreateEvolutionModal from '../Modal/CreateEvolutionModal'
 
-function EvolutionList({ diagnosticos, selectedDiagnosis, selectedPatient, setEvolutionAdded, reloadPatientData, onSelectEvolution  }) {
+function EvolutionList({ diagnosticos, selectedDiagnosis, selectedEvolution, selectedPatient, setEvolutionAdded, reloadPatientData, onSelectEvolution  }) {
 
   const [isModalOpen, setIsModalOpen] = useState(false)
-  
+  const [selectedId, setSelectedId] = useState(null);
+
+  const handleSelect = (evolucion, id) => {
+
+    if (selectedId!=null && id===selectedId ) {
+      setSelectedId(null);
+      onSelectEvolution(null)
+    }else{
+      onSelectEvolution(evolucion);
+      setSelectedId(id);
+    }
+  };
+
   const evoluciones = diagnosticos
     .flatMap((diagnostico) =>
       diagnostico.evoluciones.map((evolucion) => ({
@@ -14,14 +26,14 @@ function EvolutionList({ diagnosticos, selectedDiagnosis, selectedPatient, setEv
     ) 
     .filter(
       (evolucion) =>
-        !selectedDiagnosis || evolucion.diagnosticoNombre === selectedDiagnosis
+        !selectedDiagnosis || evolucion.diagnosticoNombre === selectedDiagnosis.nombre
     ) 
     .sort((a, b) => new Date(b.fechaHora) - new Date(a.fechaHora));
 
   return (
     <div className="bg-white shadow-md rounded-lg p-6">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold">Evoluciones</h2>
+        <h2 className="text-2xl font-bold ps-2">Evoluciones</h2>
         {selectedDiagnosis && (
           <button
           onClick={() => setIsModalOpen(true)}
@@ -40,8 +52,8 @@ function EvolutionList({ diagnosticos, selectedDiagnosis, selectedPatient, setEv
         />
       </div>
     <ul className="space-y-4">
-      {evoluciones.length>0 ? evoluciones.map((evolucion, id) => (
-        <li key={id} className="border-b pb-2 cursor-pointer" onClick={() => onSelectEvolution(evolucion.informe)}>
+      {evoluciones.length > 0 ? evoluciones.map((evolucion, id) => (
+        <li key={id} className={`cursor-pointer border-b p-2 rounded-md ${selectedId === id ? 'bg-blue-200': ''}`} onClick={() => handleSelect(evolucion, id)}>
           <p className="font-semibold">{evolucion.diagnosticoNombre}</p>
           <p>{evolucion.informe}</p>
         </li>

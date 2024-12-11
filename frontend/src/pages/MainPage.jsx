@@ -50,6 +50,7 @@ function MainPage() {
                 <EvolutionList 
                   diagnosticos={selectedPatient.historiaClinica.diagnosticos} 
                   selectedDiagnosis={selectedDiagnosis} 
+                  selectedEvolution={selectedEvolution}
                   selectedPatient={selectedPatient} 
                   setEvolutionAdded={setEvolutionAdded}
                   reloadPatientData={reloadPatientData}
@@ -58,8 +59,12 @@ function MainPage() {
               </div>
               {selectedEvolution && (
                 <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <PrescriptionBox patientId={selectedPatient} />
-                  <LabOrderBox patientId={selectedPatient} />
+                  <PrescriptionBox 
+                    selectedEvolution={selectedEvolution}
+                  />
+                  <LabOrderBox 
+                    selectedEvolution={selectedEvolution}
+                  />
                 </div>
               )}
             </div>
