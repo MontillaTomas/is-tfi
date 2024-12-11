@@ -8,4 +8,5 @@ import java.util.Optional;
 
 public interface RepositorioDiagnostico {
     Optional<Diagnostico> buscarDiagnosticoPorNombre(String nombre);
+    List<Diagnostico> obtenerDiagnostico();
 }

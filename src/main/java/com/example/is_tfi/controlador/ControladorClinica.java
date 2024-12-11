@@ -4,6 +4,7 @@ import com.example.is_tfi.dominio.Medico;
 import com.example.is_tfi.dominio.Paciente;
 import com.example.is_tfi.dto.*;
 import com.example.is_tfi.dto.CrearPedidoLaboratorioDTO;
+import com.example.is_tfi.dto.mapper.DiagnosticoMapper;
 import com.example.is_tfi.dto.mapper.MedicamentoMapper;
 import com.example.is_tfi.dto.mapper.PacienteMapper;
 import com.example.is_tfi.excepciones.*;
@@ -30,6 +31,7 @@ public class ControladorClinica {
     private final MedicamentoMapper medicamentoMapper;
     private final JwtService jwtService;
     private final ObraSocialValidator obraSocialValidator;
+    private final DiagnosticoMapper diagnosticoMapper;
 
     public ControladorClinica(JwtService jwtService, ObraSocialValidator obraSocialValidator) {
         this.repositorioPaciente = new RepositorioPacienteImpl();
@@ -39,6 +41,7 @@ public class ControladorClinica {
         this.medicamentoMapper = new MedicamentoMapper();
         this.jwtService = jwtService;
         this.obraSocialValidator = obraSocialValidator;
+        this.diagnosticoMapper = new DiagnosticoMapper();
     }
 
     private Medico obtenerMedicoLogueado(String headerAutorizacion) {
@@ -127,5 +130,15 @@ public class ControladorClinica {
         Medico medicoLogueado = obtenerMedicoLogueado(headerAutorizacion);
         paciente.crearPedidoLaboratorio(diagnostico, idEvolucion, dto.getTexto(), medicoLogueado);
         return pacienteMapper.toDto(paciente);
+    }
+
+    @GetMapping("diagnosticos")
+    public List<DiagnosticoDTO> obtenerDiagnosticos(@RequestParam(required = false) String busqueda){
+        if(busqueda != null && !busqueda.isEmpty()){
+            return repositorioDiagnostico.buscarDiagnosticoPorNombre(busqueda).stream()
+                    .map(diagnosticoMapper::toDto)
+                    .toList();
+        }
+        return diagnosticoMapper.toDto(repositorioDiagnostico.obtenerDiagnostico());
     }
 }
