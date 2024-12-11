@@ -3,6 +3,7 @@ package com.example.is_tfi.dto.mapper;
 import com.example.is_tfi.dominio.Diagnostico;
 import com.example.is_tfi.dto.DiagnosticoDTO;
 import com.example.is_tfi.dto.EvolucionDTO;
+import com.example.is_tfi.excepciones.IdYaEstaEnUsoExcepcion;
 
 public class DiagnosticoMapper implements EntidadMapper<Diagnostico, DiagnosticoDTO> {
     private final EvolucionMapper evolucionMapper;
@@ -19,7 +20,7 @@ public class DiagnosticoMapper implements EntidadMapper<Diagnostico, Diagnostico
 
         for(EvolucionDTO evolucionDTO : dto.getEvoluciones()) {
             if (diagnostico.getEvoluciones().containsKey(evolucionDTO.getId())) {
-                throw new RuntimeException("No se pueden agregar dos evoluciones con el mismo id");
+                throw new IdYaEstaEnUsoExcepcion("No se pueden agregar dos evoluciones con el mismo id");
             }
 
             diagnostico.getEvoluciones().put(evolucionDTO.getId(), evolucionMapper.toEntity(evolucionDTO));

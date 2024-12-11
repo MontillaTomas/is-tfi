@@ -1,5 +1,7 @@
 package com.example.is_tfi.dominio;
 
+import com.example.is_tfi.excepciones.EvolucionNoEncontradaExcepcion;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,16 +28,16 @@ public class Diagnostico {
     }
 
     public void crearRecetaDigital(Long idEvolucion, List<Medicamento> medicamentos, Medico medico) {
-        if (!evoluciones.containsKey(idEvolucion)) {
-            throw new RuntimeException("No se encontró la evolución con el id " + idEvolucion);
+        if (!evoluciones.containsKey(idEvolucion) || evoluciones.get(idEvolucion) == null) {
+            throw new EvolucionNoEncontradaExcepcion("No se encontró la evolución con el id " + idEvolucion);
         }
 
         evoluciones.get(idEvolucion).crearRecetaDigital(medicamentos, medico);
     }
 
     public void crearPedidoLaboratorio(Long idEvolucion, String texto, Medico medico) {
-        if (!evoluciones.containsKey(idEvolucion)) {
-            throw new RuntimeException("No se encontró la evolución con el id " + idEvolucion);
+        if (!evoluciones.containsKey(idEvolucion) || evoluciones.get(idEvolucion) == null) {
+            throw new EvolucionNoEncontradaExcepcion("No se encontró la evolución con el id " + idEvolucion);
         }
 
         evoluciones.get(idEvolucion).crearPedidoLaboratorio(texto, medico);

@@ -1,5 +1,6 @@
 package com.example.is_tfi.dominio;
 
+import com.example.is_tfi.excepciones.DiagnosticoNoEncontradoExcepcion;
 import com.example.is_tfi.excepciones.PacienteYaPoseeDiagnosticoExcepcion;
 
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class HistoriaClinica {
         return diagnosticos.stream()
                 .filter(diagnostico -> diagnostico.getNombre().equals(nombreDiagnostico))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Diagnostico no encontrado"));
+                .orElseThrow(() -> new DiagnosticoNoEncontradoExcepcion("Diagnostico no encontrado"));
     }
 
     public void agregarEvolucion(String nombreDiagnostico, String informe, Medico medico) {

@@ -14,6 +14,7 @@ import com.example.is_tfi.repositorio.impl.RepositorioDiagnosticoImpl;
 import com.example.is_tfi.repositorio.impl.RepositorioMedicoImpl;
 import com.example.is_tfi.repositorio.impl.RepositorioPacienteImpl;
 import com.example.is_tfi.servicio.JwtService;
+import com.example.is_tfi.validator.ObraSocialValidator;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,14 +29,16 @@ public class ControladorClinica {
     private final PacienteMapper pacienteMapper;
     private final MedicamentoMapper medicamentoMapper;
     private final JwtService jwtService;
+    private final ObraSocialValidator obraSocialValidator;
 
-    public ControladorClinica(JwtService jwtService) {
+    public ControladorClinica(JwtService jwtService, ObraSocialValidator obraSocialValidator) {
         this.repositorioPaciente = new RepositorioPacienteImpl();
         this.repositorioDiagnostico = new RepositorioDiagnosticoImpl();
         this.repositorioMedico = new RepositorioMedicoImpl();
         this.pacienteMapper = new PacienteMapper();
         this.medicamentoMapper = new MedicamentoMapper();
         this.jwtService = jwtService;
+        this.obraSocialValidator = obraSocialValidator;
     }
 
     private Medico obtenerMedicoLogueado(String headerAutorizacion) {
@@ -105,6 +108,10 @@ public class ControladorClinica {
             @RequestHeader("Authorization") String headerAutorizacion) throws PacienteNoEncontradoExcepcion{
         Paciente paciente = repositorioPaciente.buscarPacientePorDni(dniPaciente).orElseThrow(() -> new PacienteNoEncontradoExcepcion("Paciente no encontrado"));
         Medico medicoLogueado = obtenerMedicoLogueado(headerAutorizacion);
+        int codigoObraSocial = paciente.getObraSocial().getCodigo();
+        if (!obraSocialValidator.obraSocialEsValida(codigoObraSocial)) {
+            throw new ObraSocialNoValidaExcepcion("Obra social no válida");
+        }
         paciente.crearRecetaDigital(diagnostico, idEvolucion, medicamentoMapper.toEntity(medicamentos), medicoLogueado);
         return pacienteMapper.toDto(paciente);
     }

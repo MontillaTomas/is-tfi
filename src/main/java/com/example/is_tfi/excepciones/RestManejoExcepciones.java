@@ -78,4 +78,25 @@ public class RestManejoExcepciones {
     public ResponseEntity<String> medicoNoEncontrado(MedicoNoEncontradoExcepcion excepcion) {
         return new ResponseEntity<>(excepcion.getMessage(), HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(ObraSocialNoValidaExcepcion.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorMessage> obraSocialNoValida(ObraSocialNoValidaExcepcion excepcion) {
+        ErrorMessage message = new ErrorMessage(HttpStatus.BAD_REQUEST, excepcion.getMessage(), null);
+        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(EvolucionNoEncontradaExcepcion.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<ErrorMessage> evolucionNoEncontrada(EvolucionNoEncontradaExcepcion excepcion) {
+        ErrorMessage message = new ErrorMessage(HttpStatus.NOT_FOUND, excepcion.getMessage(), null);
+        return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(IdYaEstaEnUsoExcepcion.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ResponseEntity<ErrorMessage> idRecetaDigitalYaEstaEnUso(IdYaEstaEnUsoExcepcion excepcion) {
+        ErrorMessage message = new ErrorMessage(HttpStatus.CONFLICT, excepcion.getMessage(), null);
+        return new ResponseEntity<>(message, HttpStatus.CONFLICT);
+    }
 }

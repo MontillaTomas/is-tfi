@@ -4,6 +4,7 @@ import com.example.is_tfi.dominio.Evolucion;
 import com.example.is_tfi.dto.EvolucionDTO;
 import com.example.is_tfi.dto.PedidoLaboratorioDTO;
 import com.example.is_tfi.dto.RecetaDigitalDTO;
+import com.example.is_tfi.excepciones.IdYaEstaEnUsoExcepcion;
 
 public class EvolucionMapper {
     private final MedicoMapper medicoMapper;
@@ -24,13 +25,13 @@ public class EvolucionMapper {
         Evolucion entidad = new Evolucion(dto.getInforme(), medicoMapper.toEntity(dto.getMedico()), dto.getFechaHora());
         for(RecetaDigitalDTO recetaDigitalDTO : dto.getRecetasDigitales()) {
             if(entidad.getRecetasDigitales().containsKey(recetaDigitalDTO.getId())) {
-                throw new RuntimeException("No se pueden agregar dos recetas digitales con el mismo id");
+                throw new IdYaEstaEnUsoExcepcion("No se pueden agregar dos recetas digitales con el mismo id");
             }
             entidad.getRecetasDigitales().put(recetaDigitalDTO.getId(), recetaDigitalMapper.toEntity(recetaDigitalDTO));
         }
         for(PedidoLaboratorioDTO pedidoLaboratorioDTO : dto.getPedidosLaboratorio()) {
             if(entidad.getPedidosLaboratorio().containsKey(pedidoLaboratorioDTO.getId())) {
-                throw new RuntimeException("No se pueden agregar dos pedidos de laboratorio con el mismo id");
+                throw new IdYaEstaEnUsoExcepcion("No se pueden agregar dos pedidos de laboratorio con el mismo id");
             }
             entidad.getPedidosLaboratorio().put(pedidoLaboratorioDTO.getId(), pedidoLaboratorioMapper.toEntity(pedidoLaboratorioDTO));
         }
