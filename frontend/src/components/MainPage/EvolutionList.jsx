@@ -45,7 +45,7 @@ function EvolutionList({ diagnosticos, selectedDiagnosis, selectedEvolution, sel
         <CreateEvolutionModal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
-        selectedDiagnosis={selectedDiagnosis} 
+        selectedDiagnosis={selectedDiagnosis?.nombre} 
         selectedPatient={selectedPatient}
         setEvolutionAdded={setEvolutionAdded}
         reloadPatientData={reloadPatientData}

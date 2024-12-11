@@ -8,7 +8,7 @@ function DiagnosisList({ diagnosticos, selectedDiagnosis, onSelectDiagnosis, sel
 
   const handleSelect = (diagnosis, id) => {
     
-    if (selectedDiagnosis) {
+    if (selectedId!=null &&  id===selectedId) {
       setSelectedId(null);
       onSelectDiagnosis(null)
     }else{
@@ -44,7 +44,7 @@ function DiagnosisList({ diagnosticos, selectedDiagnosis, onSelectDiagnosis, sel
           <p className="font-semibold">No hay diagnosticos</p>
         )}
         {diagnosticos.length > 0 && selectedDiagnosis!=null ? (
-          <li className="border-b p-2 cursor-pointer hover:bg-gray-100" onClick={() => onSelectDiagnosis(null)} >
+          <li className="border-b p-2 cursor-pointer hover:bg-gray-100" onClick={() => handleSelect(null)} >
             <p className="font-semibold text-gray-500 italic">Mostrar todas las evoluciones</p>
           </li>
         ): <></>}    
