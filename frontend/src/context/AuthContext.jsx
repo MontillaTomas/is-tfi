@@ -41,12 +41,13 @@ export const AuthContext = ({children}) => {
     const login = async (user)=>{
         try {
             const userData = await authService.login(user);
+            
             if(userData){
                 setUser(userData);
                 setIsAuthenticated(true);
             } 
-        } catch (error) {
-            throw error;
+        } catch (error) {        
+            throw error;    
         }
     }
 

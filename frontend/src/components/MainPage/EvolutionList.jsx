@@ -53,7 +53,7 @@ function EvolutionList({ diagnosticos, selectedDiagnosis, selectedEvolution, sel
       </div>
     <ul className="space-y-4">
       {evoluciones.length > 0 ? evoluciones.map((evolucion, id) => (
-        <li key={id} className={`cursor-pointer border-b p-2 rounded-md ${selectedId === id ? 'bg-blue-200': ''}`} onClick={() => handleSelect(evolucion, id)}>
+        <li key={id} className={`cursor-pointer border-b p-2 rounded-md ${selectedId === id ? 'bg-green-300': ''}`} onClick={() => handleSelect(evolucion, id)}>
           <p className="font-semibold">{evolucion.diagnosticoNombre}</p>
           <p>{evolucion.informe}</p>
         </li>

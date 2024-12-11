@@ -14,11 +14,8 @@ function LoginPage() {
     e.preventDefault();
     try{
       await auth.login({email: username,contrasena: password});
-    }catch(error){
-      let err = await error;
-      console.log(err);
-      
-      // setAuthError(error.data.error);
+    }catch(error){  
+      setAuthError(`${error}`);
     } 
   }
 
@@ -45,6 +42,13 @@ function LoginPage() {
                 <button type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                   Iniciar sesión
                 </button>
+                {authError && 
+                  <div className='flex gap-3 justify-center mt-6'>
+                    <svg className="w-6 h-6 text-red-700" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    <p className='text-red-700 text-lg'>{authError}</p>
+                  </div>}
               </div>
           </form>
       </div>

@@ -12,11 +12,11 @@ const login  = async(user)=>{
         },
         body: JSON.stringify({ email, contrasena }),
     });
-    const userData = await response.json();
-    console.log(userData);
     
-    if (!response.ok) throw new 'Error al iniciar sesion'; 
-        
+    if (!response.ok) throw new Error('Error al iniciar sesion'); 
+
+    const userData = await response.json();
+
     Cookie.set('tokenAcceso', userData.tokenAcceso, { expires: userData.expiraEn / (1000 * 60 * 60 * 24) });
     return userData;
 }
