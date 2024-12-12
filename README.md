@@ -81,7 +81,7 @@ npm install
 3. Ejecute la aplicación frontend
 
 ```
-npm start
+npm run dev
 ```
 
 La aplicación frontend estará disponible en `http://localhost:5173`
