@@ -1,4 +1,4 @@
-import React, { useState, useCallback  } from 'react'
+import React, { useState, useCallback, useEffect  } from 'react'
 import Navbar from '../components/Navbar'
 import PatientSearch from '../components/MainPage/PatientSearch'
 import PatientInfo from '../components/MainPage/PatientInfo'
@@ -14,6 +14,8 @@ function MainPage() {
   const [selectedEvolution, setSelectedEvolution] = useState(null);
   const [evolutionAdded, setEvolutionAdded] = useState(false);
   const [diagnosisAdded, setDiagnosisAdded] = useState(false);
+  const [labOrderAdded, setLabOrderAdded] = useState(false);
+
   const { getPaciente } = usePaciente()
 
    const handlePatientSelect = useCallback(async (patient) => {
@@ -24,10 +26,27 @@ function MainPage() {
 
   const reloadPatientData = useCallback(async () => {
     if (selectedPatient) {
-      const updatedPatient = await getPaciente(selectedPatient.dni)
-      setSelectedPatient(updatedPatient)
+      const updatedPatient = await getPaciente(selectedPatient.dni);
+      setSelectedPatient(updatedPatient);
+      
+      if (selectedEvolution) {
+        const updatedDiagnosis = updatedPatient.historiaClinica.diagnosticos
+          .find(d => d.nombre === selectedEvolution.diagnosticoNombre);
+      
+        if (updatedDiagnosis) {
+          const updatedEvolution = updatedDiagnosis.evoluciones
+            .find(e => e.id === selectedEvolution.id);
+        
+          if (updatedEvolution) {
+            setSelectedEvolution({
+              ...updatedEvolution,
+              diagnosticoNombre: updatedDiagnosis.nombre 
+            });
+          }
+        }
+      }
     }
-  }, [selectedPatient, getPaciente])
+  }, [selectedPatient, selectedEvolution, getPaciente]);
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -59,11 +78,18 @@ function MainPage() {
               </div>
               {selectedEvolution && (
                 <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <PrescriptionBox 
+                  <PrescriptionBox    
                     selectedEvolution={selectedEvolution}
+                    selectedPatient={selectedPatient} 
+                    setLabOrderAdded={setEvolutionAdded}
+                    reloadPatientData={reloadPatientData}
                   />
                   <LabOrderBox 
                     selectedEvolution={selectedEvolution}
+                    selectedPatient={selectedPatient} 
+                    setLabOrderAdded={setLabOrderAdded}
+                    reloadPatientData={reloadPatientData}
+                    labOrderAdded={labOrderAdded}
                   />
                 </div>
               )}

@@ -51,7 +51,6 @@ function CreateDiagnosisModal({ isOpen, onClose , selectedPatient, setDiagnosisA
     e.preventDefault()
     
     const diagnostico = await createDiagnosis(selectedPatient.dni, diagnosisData.name);
-    console.log(diagnostico);
     
     setDiagnosisData({ name: ''})
     setDiagnosisAdded(true)

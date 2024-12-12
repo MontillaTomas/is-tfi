@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
+import usePaciente from '../../hooks/usePaciente'
 
-function CreateLabOrderModal({ isOpen, onClose, patientId }) {
+function CreateLabOrderModal({ isOpen, onClose, selectedDiagnosis,selectedEvolution, selectedPatient, setLabOrderAdded, reloadPatientData }) {
   const [labOrderData, setLabOrderData] = useState({
-    test: '',
-    notes: ''
+    text: '',
   })
+
+  const { createLabOrder } = usePaciente() 
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -14,14 +16,20 @@ function CreateLabOrderModal({ isOpen, onClose, patientId }) {
     }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault()
-    // Aquí normalmente enviarías los datos a tu API
-    console.log('Datos del pedido de laboratorio:', { patientId, ...labOrderData })
-    // Limpia el formulario y cierra el modal
-    setLabOrderData({ test: '', notes: '' })
+
+    const pedido = await createLabOrder(selectedPatient,selectedDiagnosis,selectedEvolution, labOrderData.text);
+    console.log(pedido);
+
+    setLabOrderData({ text: '' })
+    setLabOrderAdded(true)
+    await reloadPatientData()
     onClose()
   }
+
+  if (!isOpen) return null
+
 
   if (!isOpen) return null
 
@@ -33,8 +41,8 @@ function CreateLabOrderModal({ isOpen, onClose, patientId }) {
           <div className="mt-2 px-7 py-3">
             <form onSubmit={handleSubmit}>
               <textarea
-                name="notes"
-                value={labOrderData.notes}
+                name="text"
+                value={labOrderData.text}
                 onChange={handleChange}
                 placeholder="Descripcion"
                 className="mt-3 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"

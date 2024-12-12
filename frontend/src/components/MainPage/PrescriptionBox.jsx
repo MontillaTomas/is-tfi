@@ -4,7 +4,7 @@ import CreatePrescriptionModal from '../Modal/CreatePrescriptionModal'
 function PrescriptionBox({ selectedEvolution }) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   
-  const receta = selectedEvolution.recetasDigitales
+  const receta = selectedEvolution?.recetasDigitales
   .reduce((ultima, receta) => {
       const fechaReceta = new Date(receta.fechaHora);
       return !ultima || fechaReceta > new Date(ultima.fechaHora) ? receta : ultima;

@@ -6,23 +6,25 @@ const usePaciente = () => {
     const [error,setError] = useState(null)
     const [loading,setLoading] = useState(false)
 
-    const getAllPacientes = async() =>{
+    const getPacientes = async (searchTerm) => {
         setLoading(true);
         setError(null)
         try {
-            const data = await pacienteService.getAllPacientes()
+          const data = await pacienteService.getPacientes(searchTerm);
+          return data
         } catch (error) {
-            
+          setError(error.message);
+        } finally {
+          setLoading(false);
         }
-    }
-
+      }
+      
     const getPaciente = async(dni)=>{
         setLoading(true);
         setError(null)
         try {
             
             const data = await pacienteService.getPaciente(dni);
-            console.log(data);
             
             return data
 
@@ -52,7 +54,6 @@ const usePaciente = () => {
     const createDiagnosis = async(dni, nombre)=>{
         setLoading(true);
         setError(null)
-        console.log(dni,nombre);
         try {
             
             const data = await pacienteService.createDiagnosis(dni, nombre);
@@ -66,12 +67,32 @@ const usePaciente = () => {
         }
     }
 
+    const createLabOrder = async (dni, diagnostico, idEvolucion, texto) => {
+        console.log(dni,diagnostico,idEvolucion,texto);
+        
+        setLoading(true);
+        setError(null)
+        try {
+            
+            const data = await pacienteService.createLabOrder(dni, diagnostico, idEvolucion, texto);
+            console.log(data);
+            return data
+
+        } catch (error) {
+            setError(error.message);
+        }finally{
+            setLoading(false);
+        }
+    }
+
     return {
         error,
         loading,
-        getPaciente, 
+        getPaciente,
+        getPacientes, 
         createEvolution,
-        createDiagnosis
+        createDiagnosis,
+        createLabOrder
     }
 
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import CreateEvolutionModal from '../Modal/CreateEvolutionModal'
 
-function EvolutionList({ diagnosticos, selectedDiagnosis, selectedEvolution, selectedPatient, setEvolutionAdded, reloadPatientData, onSelectEvolution  }) {
+function EvolutionList({ diagnosticos, selectedDiagnosis, selectedPatient, setEvolutionAdded, reloadPatientData, onSelectEvolution  }) {
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedId, setSelectedId] = useState(null);
