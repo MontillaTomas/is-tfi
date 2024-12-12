@@ -34,7 +34,7 @@ public class RepositorioPacienteImpl implements RepositorioPaciente {
                 LocalDate.of(2003, 4, 2),
                 "montilla.tom1@gmail.com",
                 "+123123123",
-                new ObraSocial(1, "OBRA SOCIAL DEL PERSONAL ADMINISTRATIVO Y TECNICO DE LA CONSTRUCCION Y AFINES", "OSPATCA"),
+                new ObraSocial(119708, "OBRA SOCIAL DEL PERSONAL DE SEGURIDAD COMERCIAL, INDUSTRIAL E INVESTIGACIONES PRIVADAS", "OSPSIP"),
                 123456,
                 new Direccion("Calle Falsa", 123, "1234", "Springfield"));
 

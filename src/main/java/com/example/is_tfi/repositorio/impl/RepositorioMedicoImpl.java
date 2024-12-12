@@ -21,7 +21,7 @@ public class RepositorioMedicoImpl implements RepositorioMedico {
 
         Medico medico = new Medico(44747797L,
                 20447477972L,
-                "Dr House",
+                "Gregory House",
                 LocalDate.of(2003, 4, 2),
                 "doctor.house@gmail.com",
                 "+123123123",
