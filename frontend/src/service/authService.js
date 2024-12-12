@@ -13,7 +13,7 @@ const login  = async(user)=>{
         body: JSON.stringify({ email, contrasena }),
     });
     
-    if (!response.ok) throw new Error('Error al iniciar sesion'); 
+    if (!response.ok) throw new Error('Usuario o contraseña incorrectas'); 
 
     const userData = await response.json();
 

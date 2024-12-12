@@ -13,7 +13,9 @@ const usePaciente = () => {
           const data = await pacienteService.getPacientes(searchTerm);
           return data
         } catch (error) {
-          setError(error.message);
+            console.log(error);
+            
+          setError(error);
         } finally {
           setLoading(false);
         }
@@ -45,7 +47,7 @@ const usePaciente = () => {
             return data
 
         } catch (error) {
-            setError(error.message);
+            throw `${error}`
         }finally{
             setLoading(false);
         }
@@ -60,8 +62,8 @@ const usePaciente = () => {
             console.log(data);
             return data
 
-        } catch (error) {
-            setError(error.message);
+        } catch (error) {     
+           throw `${error}`
         }finally{
             setLoading(false);
         }
@@ -79,7 +81,7 @@ const usePaciente = () => {
             return data
 
         } catch (error) {
-            setError(error.message);
+            throw `${error}`
         }finally{
             setLoading(false);
         }

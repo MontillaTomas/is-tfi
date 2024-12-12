@@ -51,11 +51,11 @@ const createEvolution = async (dni,diagnostico,informe) => {
             'informe':informe,
         })
     });
-    const data = await response.json();
-    if (!response.ok) {
 
-        throw new Error(`${data.message}`);
-    }
+    const data = await response.json();
+
+    if (!response.ok) throw new Error(`${data.detalles.informe}`);
+
     return data
 }
 
@@ -72,13 +72,11 @@ const createDiagnosis = async (dni,nombre) => {
             'nombre':nombre,
         })
     });
-    const data = await response.body();
+    const data = await response.json();
 
     console.log(data);
     
-    if (!response.ok) {
-        throw new Error(`${data.message}`);
-    }
+    if (!response.ok) throw new Error(`${data.message}`) ;
 
     return data
 }
@@ -96,17 +94,37 @@ const createLabOrder = async (dni, diagnostico, idEvolucion, texto) => {
             'texto':texto,
         })
     });
+    const data = await response.json();
+
+    console.log(data);
+    
+    if (!response.ok)  throw new Error(`${data.detalles.texto}`);
+
+    return data
+}
+
+const createPrescription = async (dni, diagnostico, idEvolucion, texto) => {
+
+    const token = Cookie.get("tokenAcceso");
+    const response = await fetch(`${API_URL}/${dni}/diagnosticos/${diagnostico}/evoluciones/${idEvolucion}/pedidos-laboratorio`, {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+        },
+        body:JSON.stringify({
+            'texto':texto,
+        })
+    });
     const data = await response.body();
 
     console.log(data);
     
-    if (!response.ok) {
-        throw new Error(`${data.message}`);
-    }
+    if (!response.ok)  throw new Error(`${data.message}`);
 
     return data
 }
 
 export const pacienteService = {
-    getPaciente,getPacientes,createEvolution,createDiagnosis,createLabOrder
+    getPaciente,getPacientes,createEvolution,createDiagnosis,createLabOrder,createPrescription
 }

@@ -7,6 +7,7 @@ function CreateEvolutionModal({ isOpen, onClose, selectedDiagnosis, selectedPati
   })
 
   const { createEvolution } = usePaciente() 
+  const [error, setError] = useState(null)
 
 
   const handleChange = (e) => {
@@ -17,16 +18,26 @@ function CreateEvolutionModal({ isOpen, onClose, selectedDiagnosis, selectedPati
     }))
   }
 
+  const handleOnClose = ()=>{
+    setError(null)
+    onClose()
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    const evolucion = await createEvolution(selectedPatient.dni,selectedDiagnosis, evolutionData.description);
-    console.log(evolucion);
+    try {
+      const evolucion = await createEvolution(selectedPatient.dni,selectedDiagnosis, evolutionData.description);
+      console.log(evolucion);
 
-    setEvolutionData({ description: '' })
-    setEvolutionAdded(true)
-    await reloadPatientData()
-    onClose()
+      setEvolutionData({ description: '' })
+      setEvolutionAdded(true)
+      await reloadPatientData()
+      setError(null)
+      onClose()
+    } catch (error) {
+      setError(error)
+    }
   }
 
   if (!isOpen) return null
@@ -50,7 +61,7 @@ function CreateEvolutionModal({ isOpen, onClose, selectedDiagnosis, selectedPati
               <div className="flex justify-between mt-4">
                 <button
                   type="button"
-                  onClick={onClose}
+                  onClick={handleOnClose}
                   className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
                 >
                   Cancelar
@@ -62,15 +73,16 @@ function CreateEvolutionModal({ isOpen, onClose, selectedDiagnosis, selectedPati
                   Agregar Evolución
                 </button>
               </div>
+              {error && 
+                <div className='flex gap-3 justify-center mt-6'>
+                  <svg className="w-6 h-6 text-red-700" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                  </svg>
+                  <p className='text-red-700 text-md'>{error}</p>
+                </div>}
             </form>
           </div>
         </div>
-        <button
-          onClick={onClose}
-          className="absolute top-0 right-0 mt-4 mr-4 text-gray-500 hover:text-gray-800"
-        >
-        </button>
-        &times;
       </div>
     </div>
   )
