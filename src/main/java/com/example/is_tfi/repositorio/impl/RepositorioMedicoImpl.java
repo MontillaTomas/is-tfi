@@ -5,12 +5,14 @@ import com.example.is_tfi.dominio.Medico;
 import com.example.is_tfi.dominio.Usuario;
 import com.example.is_tfi.repositorio.RepositorioMedico;
 import com.example.is_tfi.repositorio.RepositorioUsuario;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.List;
 
+@Repository
 public class RepositorioMedicoImpl implements RepositorioMedico {
     private List<Medico> medicos;
     private final RepositorioUsuario repositorioUsuario;

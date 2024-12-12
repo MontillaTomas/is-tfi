@@ -3,9 +3,11 @@ package com.example.is_tfi.dto.mapper;
 import com.example.is_tfi.dominio.Paciente;
 import com.example.is_tfi.dto.CrearPacienteDTO;
 import com.example.is_tfi.dto.PacienteDTO;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class PacienteMapper implements EntidadMapper<Paciente, PacienteDTO> {
     private final HistoriaClinicaMapper historiaClinicaMapper;
     private final DireccionMapper direccionMapper;

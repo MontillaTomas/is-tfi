@@ -2,10 +2,12 @@ package com.example.is_tfi.dto.mapper;
 
 import com.example.is_tfi.dominio.Medicamento;
 import com.example.is_tfi.dto.MedicamentoDTO;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class MedicamentoMapper implements EntidadMapper<Medicamento, MedicamentoDTO> {
     @Override
     public Medicamento toEntity(MedicamentoDTO dto) {
