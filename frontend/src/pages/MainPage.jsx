@@ -63,6 +63,7 @@ function MainPage() {
                   diagnosticos={selectedPatient.historiaClinica.diagnosticos} 
                   selectedDiagnosis={selectedDiagnosis}
                   onSelectDiagnosis={setSelectedDiagnosis}
+                  onSelectEvolution={setSelectedEvolution}
                   selectedPatient={selectedPatient} 
                   setDiagnosisAdded={setDiagnosisAdded}
                   reloadPatientData={reloadPatientData}

@@ -11,16 +11,20 @@ function LabOrderBox({ selectedEvolution, selectedPatient, setLabOrderAdded, rel
     }
   }, [labOrderAdded, reloadPatientData, setLabOrderAdded]);
 
-  const lastOrder = selectedEvolution?.pedidosLaboratorio?.length > 0
-    ? selectedEvolution.pedidosLaboratorio[selectedEvolution.pedidosLaboratorio.length - 1]
-    : null;
+  const lastOrder = selectedEvolution.pedidosLaboratorio.sort((a, b) => b.id - a.id);
   
   return (
     <div className="bg-white shadow-md rounded-lg p-6">
       <h2 className="text-2xl font-bold mb-4">Pedidos de Laboratorio</h2>
       <div className="mb-4">
-        <h3 className="text-lg font-semibold">Último Pedido:</h3>
-        {lastOrder ? <p>Descripcion: {lastOrder.texto}</p> : <p>No hay pedidos de laboratorio </p> }
+      <ul className="space-y-4">
+        {lastOrder.length > 0 ? lastOrder.map((order)=>(
+          <li key={order.id} className={`border-b p-2 rounded-md `}>
+            <p className="font-semibold">Pedido numero {order.id}</p>
+            <p key={order.id}>Descripcion: {order.texto}</p> 
+          </li>
+        )) : <p>No hay pedidos de laboratorio </p>}
+      </ul>
       </div>
       <button
         onClick={() => setIsModalOpen(true)}

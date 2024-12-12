@@ -1,4 +1,5 @@
 const API_URL = "https://cors-anywhere.herokuapp.com/https://istp1service.azurewebsites.net/api/servicio-salud/medicamentos";
+import Cookie from 'js-cookie'
 
 const getMedicines = async () => {
 
@@ -47,6 +48,31 @@ const getMedicine = async (codigo) => {
    
 }
 
+const getDiagnosis = async () => {
+
+    const token = Cookie.get("tokenAcceso");
+    const response = await fetch(`http://localhost:8080/api/v1/diagnosticos`, {
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+        },
+    });
+
+    const data = await response.json();
+
+    console.log(data);
+    
+    if (!response.ok) {
+
+        throw new Error(`${data.message}`);
+    }
+    return data
+
+
+}
+
+
 export const generalsService = {
-    getMedicines, getMedicine
+    getMedicines, getMedicine, getDiagnosis
 }

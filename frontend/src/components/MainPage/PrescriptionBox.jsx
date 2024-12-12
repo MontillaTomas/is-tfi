@@ -12,27 +12,35 @@ function PrescriptionBox({ selectedEvolution, selectedPatient, setPrescriptionAd
   }, [prescriptionAdded, reloadPatientData, setPrescriptionAdded]);
 
 
-  const receta = selectedEvolution?.recetasDigitales
-  .reduce((ultima, receta) => {
-      const fechaReceta = new Date(receta.fechaHora);
-      return !ultima || fechaReceta > new Date(ultima.fechaHora) ? receta : ultima;
-  }, null);
+  const recetas = selectedEvolution?.recetasDigitales
+  .sort((a, b) => new Date(b.fechaHora) - new Date(a.fechaHora))
   
+  console.log(recetas);
   
   return (
     <div className="bg-white shadow-md rounded-lg p-6">
       <h2 className="text-2xl font-bold mb-4">Recetas Digitales</h2>
       <div className="mb-4">
-        <h3 className="text-lg font-semibold">Última Receta:</h3>
-        {receta  ? receta.medicamentos.map((medicamento,id)=>(
-          <p key={id}>Medicamento {id+1}: {medicamento?.descripcion} - {medicamento?.formato}</p>
-        ))
-        :
-        <p>No hay recetas</p>
-        }
-        {receta ? (
-          <p>Fecha: {new Date(receta.fechaHora).toLocaleString()}</p>
-        ):<></>}
+        <ul className="space-y-4">
+          {recetas.length > 0 ? recetas.map((receta,id)=>(
+            <>
+            <li key={id} className={'p-2 rounded-md '} >
+             <p>Receta {receta.id}</p>   
+              {
+              receta.medicamentos.map((medicamento)=>(
+                
+                  <p>{`${medicamento.descripcion} - ${medicamento.formato}`}</p>
+                
+                ))}
+              <p>Fecha: {new Date(receta.fechaHora).toLocaleString()}</p>
+            </li> 
+            </>
+          ))
+          :
+          <p>No hay recetas</p>
+          }     
+         
+        </ul>
       </div>
       <button
         onClick={() => setIsModalOpen(true)}

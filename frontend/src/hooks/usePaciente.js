@@ -1,10 +1,12 @@
 import {useState} from 'react'
 import { pacienteService } from '../service/pacienteService'
+import { generalsService } from '../service/generalsService'
 
 const usePaciente = () => {
   
     const [error,setError] = useState(null)
     const [loading,setLoading] = useState(false)
+    const [possibleDiagnoses, setPossibleDiagnosis] = useState(null)
 
     const getPacientes = async (searchTerm) => {
         setLoading(true);
@@ -103,15 +105,32 @@ const usePaciente = () => {
         }
     }
 
+    const getDiagnosis = async () => {
+        setLoading(true);
+        setError(null)
+        try {
+          const data = await generalsService.getDiagnosis();
+          setPossibleDiagnosis(data)
+          return data
+        } catch (error) {         
+          throw `${error}`
+        } finally {
+          setLoading(false);
+        }
+      }
+      
+
     return {
         error,
         loading,
+        possibleDiagnoses,
         getPaciente,
         getPacientes, 
         createEvolution,
         createDiagnosis,
         createLabOrder,
-        createPrescription
+        createPrescription,
+        getDiagnosis
     }
 
 }

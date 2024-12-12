@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import CreateDiagnosisModal from '../Modal/CreateDiagnosisModal'
 
-function DiagnosisList({ diagnosticos, selectedDiagnosis, onSelectDiagnosis, selectedPatient, setDiagnosisAdded, reloadPatientData}) {
+function DiagnosisList({ diagnosticos, selectedDiagnosis, onSelectDiagnosis, onSelectEvolution, selectedPatient, setDiagnosisAdded, reloadPatientData}) {
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedId, setSelectedId] = useState(null);
@@ -11,9 +11,11 @@ function DiagnosisList({ diagnosticos, selectedDiagnosis, onSelectDiagnosis, sel
     if (selectedId!=null &&  id===selectedId) {
       setSelectedId(null);
       onSelectDiagnosis(null)
+
     }else{
       setSelectedId(id);
       onSelectDiagnosis(diagnosis);
+      onSelectEvolution(null)
     }
   };
 

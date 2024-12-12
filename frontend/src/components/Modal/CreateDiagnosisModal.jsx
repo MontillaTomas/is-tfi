@@ -1,36 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import usePaciente from '../../hooks/usePaciente'
 
-const possibleDiagnoses = [
-  "Diabetes",
-  "Hipertensión",
-  "Covid-19",
-  "Gripe",
-  "Resfrío",
-  "Dengue",
-  "Zika",
-  "Chikungunya"
-]
-
 function CreateDiagnosisModal({ isOpen, onClose , selectedPatient, setDiagnosisAdded, reloadPatientData }) {
   const [diagnosisData, setDiagnosisData] = useState({
     name: '',
   })
   const [suggestions, setSuggestions] = useState([])
   const [error, setError] = useState(null)
-  const { createDiagnosis } = usePaciente()
+  const {createDiagnosis, getDiagnosis, possibleDiagnoses } = usePaciente()
 
-  
-  useEffect(() => {
-    if (diagnosisData.name) {
-      const filteredSuggestions = possibleDiagnoses.filter(diagnosis =>
-        diagnosis.toLowerCase().includes(diagnosisData.name.toLowerCase())
-      )
-      setSuggestions(filteredSuggestions)
-    } else {
-      setSuggestions([])
-    }
-  }, [diagnosisData.name])
+  useEffect(()=>{
+    getDiagnosis()
+  },[])
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -38,14 +19,6 @@ function CreateDiagnosisModal({ isOpen, onClose , selectedPatient, setDiagnosisA
       ...prevData,
       [name]: value
     }))
-  }
-
-  const handleSuggestionClick = (suggestion) => {
-    setDiagnosisData(prevData => ({
-      ...prevData,
-      name: suggestion
-    }))
-    setSuggestions([])
   }
 
   const handleOnClose = ()=>{
@@ -82,29 +55,18 @@ function CreateDiagnosisModal({ isOpen, onClose , selectedPatient, setDiagnosisA
           <div className="mt-2 px-7 py-3">
             <form onSubmit={handleSubmit}>
               <div className="relative">
-                <input
-                  type="text"
+                <select
                   name="name"
-                  value={diagnosisData.name}
                   onChange={handleChange}
                   placeholder="Diagnóstico"
                   className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  autoComplete='off'
                   required
-                />
-                {suggestions.length > 0 && (
-                  <ul className="absolute z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto">
-                    {suggestions.map((suggestion, index) => (
-                      <li
-                        key={index}
-                        className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
-                        onClick={() => handleSuggestionClick(suggestion)}
-                      >
-                        {suggestion}
-                      </li>
-                    ))}
-                  </ul>
-                )}
+                >
+                  <option></option>
+                  {possibleDiagnoses.length >0 ? possibleDiagnoses.map((diagnosis,id)=>(
+                    <option key={id} value={diagnosis.nombre}>{diagnosis.nombre}</option>
+                  )):<></>}
+                </select>
               </div>
               <div className="flex justify-between mt-4">
                 <button

@@ -58,12 +58,7 @@ function PatientSearch({ onPatientSelect, selectDiagnosis, selectEvolution }) {
           aria-label="Buscar paciente"
           aria-autocomplete="list"
         />
-        <button
-          type="submit"
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-r-md flex items-center"
-        >
-          Buscar
-        </button>
+
       </form>
       {suggestions.length > 0 && (
         <ul className="absolute z-10 w-full bg-white border border-gray-300 mt-1 rounded-md shadow-lg max-h-60 overflow-y-auto" role="listbox">

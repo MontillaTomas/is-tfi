@@ -174,8 +174,6 @@ const createPrescription = async (dni, diagnostico, idEvolucion, medication1, me
     
         return data
     }
-
-   
    
 }
 

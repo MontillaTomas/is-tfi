@@ -123,14 +123,15 @@ function CreatePrescriptionModal({ isOpen, onClose, selectedDiagnosis,selectedEv
                     value={prescriptionData[`medication${num}`].displayValue || prescriptionData[`medication${num}`].descripcion}
                     onChange={(e) => handleChange(e, num)}
                     placeholder={`Medicamento ${num}`}
+                    autocomplete="off"
                     className="text-sm mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   />
                   {(num === 1 ? suggestions1 : suggestions2).length > 0 && (
-                    <ul className="mt-1 bg-white border border-gray-300 rounded-md shadow-sm">
+                    <ul className="mt-1 absolute bg-white border border-gray-300 rounded-md shadow-sm">
                       {(num === 1 ? suggestions1 : suggestions2).map((med) => (
                         <li 
                           key={med.codigo}
-                          className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                          className="px-3 text-sm py-2 hover:bg-gray-100 cursor-pointer"
                           onClick={() => handleSelectMedication(med, num)}
                         >
                           {med.codigo} - {med.descripcion} - {med.formato}
