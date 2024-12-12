@@ -11,7 +11,7 @@ Este proyecto fue desarrollado como Trabajo Final Integrador para la materia Ing
 **Integrantes**:  
 - Gallardo, Maximiliano - 50.284  
 - Lopez Asis, Juan Manuel - 53.303  
-- Montilla, Tomás - 53.331  
+- Montilla, Tomas - 53.331  
 - Nanterne Bachs, Facundo Esteban - 53.346  
 
 ## Requisitos Previos
