@@ -4,9 +4,11 @@ import com.example.is_tfi.dominio.Diagnostico;
 import com.example.is_tfi.dto.DiagnosticoDTO;
 import com.example.is_tfi.dto.EvolucionDTO;
 import com.example.is_tfi.excepciones.IdYaEstaEnUsoExcepcion;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class DiagnosticoMapper implements EntidadMapper<Diagnostico, DiagnosticoDTO> {
     private final EvolucionMapper evolucionMapper;
 
