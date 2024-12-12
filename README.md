@@ -1,61 +1,88 @@
 # Sistema de Clínica Médica
 
-Sistema de gestión clínica que permite el manejo de historias clínicas, evoluciones médicas, recetas digitales y pedidos de laboratorio.
+Sistema de gestión clínica para el manejo de historias clínicas, evoluciones médicas, recetas digitales y pedidos de laboratorio.
 
-## Créditos
+## Datos del Proyecto
 Este proyecto fue desarrollado como Trabajo Final Integrador para la materia Ingeniería de Software.
 
-**Universidad:** Universidad Tecnológica Nacional - Facultad Regional Tucumán
-**Comisión:** 4K2
-**Grupo:** 3
-
-### Equipo de Desarrollo
-- Alderete, Estefanía (50.048)
-- Gallardo, Maximiliano (50.284)
-- Lopez Asis, Juan Manuel (53.303)
-- Montilla, Tomas (53.331)
-- Nanterne Bachs, Facundo Esteban (53.346)
-
-## Estructura del Proyecto
-
-is_tfi/
-├── frontend/               # Proyecto React
-├── src/
-│   ├── main/
-│   │   ├── java/
-│   │   │   └── com.example.is_tfi/  # Código fuente backend
-│   │   └── resources/
-│   │       └── application.properties
-│   └── test/              # Pruebas
-├── target/                # Archivos compilados
-├── pom.xml               # Configuración Maven
-└── README.md
+**Universidad:** Universidad Tecnológica Nacional - Facultad Regional Tucumán  
+**Comisión:** 4K2  
+**Grupo:** 3  
+**Integrantes**:  
+- Gallardo, Maximiliano - 50.284  
+- Lopez Asis, Juan Manuel - 53.303  
+- Montilla, Tomás - 53.331  
+- Nanterne Bachs, Facundo Esteban - 53.346  
 
 ## Requisitos Previos
+
+Para ejecutar el proyecto, es necesario tener instalados los siguientes programas:
+
 - Java 21
 - Maven
 - Node.js y npm
 
 ## Instalación y Ejecución
 
-### Backend (Spring Boot)
+Para ejecutar el proyecto, siga los siguientes pasos:
 
-# Desde la raíz del proyecto (is_tfi)
+1. Clonar el repositorio
+
+```bash
+git clone https://github.com/MontillaTomas/is-tfi.git
+```
+
+2. Ingresar a la carpeta del proyecto
+
+```bash
+cd is-tfi
+```
+
+#### Backend (Spring Boot)
+
+Para ejecutar el servidor backend, ejecute los siguientes comandos en la raíz del proyecto:
+
+1. Ingresar a la carpeta `backend`:
+
+```bash
+cd backend
+```
+
+2. Instale las dependencias
+
+```
 mvn clean install
+```
+
+3. Ejecute la aplicación backend
+
+```
 mvn spring-boot:run
+```
 
 El servidor backend estará disponible en `http://localhost:8080`
 
-### Frontend (React)
+#### Frontend (React)
 
-# Navegar al directorio frontend
+Para ejecutar la aplicación frontend, ejecute los siguientes comandos en la raíz del proyecto:
+
+1. Ingrese a la carpeta `frontend`:
+
+```bash
 cd frontend
+```
 
-# Instalar dependencias
+2. Instale las dependencias
+
+```
 npm install
+```
 
-# Iniciar el servidor de desarrollo
-npm run dev
+3. Ejecute la aplicación frontend
+
+```
+npm start
+```
 
 La aplicación frontend estará disponible en `http://localhost:5173`
 
@@ -63,11 +90,12 @@ La aplicación frontend estará disponible en `http://localhost:5173`
 
 ### Autenticación
 
+La aplicación utiliza autenticación JWT. Para obtener un token, envíe una solicitud POST a `/api/v1/autenticacion/login` con el email y la contraseña del usuario. Actualmente, el único usuario registrado es el siguiente:
+
 #### Login
 - **URL:** `/api/v1/autenticacion/login`
 - **Método:** `POST`
 - **Body:**
-- 
 ```json
 {
     "email": "email@email.com",
