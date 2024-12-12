@@ -17,6 +17,7 @@ import com.example.is_tfi.repositorio.impl.RepositorioPacienteImpl;
 import com.example.is_tfi.servicio.JwtService;
 import com.example.is_tfi.validator.ObraSocialValidator;
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -52,93 +53,96 @@ public class ControladorClinica {
     }
 
     @GetMapping("pacientes/{dni}")
-    public PacienteDTO obtenerPaciente(@PathVariable Long dni) throws PacienteNoEncontradoExcepcion {
+    public ResponseEntity<PacienteDTO> obtenerPaciente(@PathVariable Long dni) {
         return repositorioPaciente.buscarPacientePorDni(dni)
                 .map(pacienteMapper::toDto)
+                .map(ResponseEntity::ok)
                 .orElseThrow(() -> new PacienteNoEncontradoExcepcion("Paciente no encontrado"));
     }
 
     @GetMapping("pacientes")
-    public List<PacienteDTO> obtenerPacientes(@RequestParam(required = false) String busqueda) {
-        if(busqueda != null && !busqueda.isEmpty()) {
-            return repositorioPaciente.buscarPacientesPorTexto(busqueda).stream()
-                    .map(pacienteMapper::toDto)
-                    .toList();
-        }
-        return pacienteMapper.toDto(repositorioPaciente.obtenerPacientes());
+    public ResponseEntity<List<PacienteDTO>> obtenerPacientes(@RequestParam(required = false) String busqueda) {
+        List<PacienteDTO> pacientes = (busqueda != null && !busqueda.isEmpty())
+                ? repositorioPaciente.buscarPacientesPorTexto(busqueda).stream()
+                .map(pacienteMapper::toDto)
+                .toList()
+                : pacienteMapper.toDto(repositorioPaciente.obtenerPacientes());
+        return ResponseEntity.ok(pacientes);
     }
 
     @PostMapping("pacientes")
-    public PacienteDTO crearPaciente(@Valid @RequestBody  CrearPacienteDTO dto) throws DniEnUsoExcepcion, CuilEnUsoExcepcion {
-        repositorioPaciente.buscarPacientePorDni(dto.getDni()).ifPresent(paciente -> {
+    public ResponseEntity<PacienteDTO> crearPaciente(@Valid @RequestBody CrearPacienteDTO dto) {
+        repositorioPaciente.buscarPacientePorDni(dto.getDni()).ifPresent(p -> {
             throw new DniEnUsoExcepcion("Ya existe un paciente con ese DNI");
         });
-        repositorioPaciente.buscarPacientePorCuil(dto.getCuil()).ifPresent(paciente -> {
+        repositorioPaciente.buscarPacientePorCuil(dto.getCuil()).ifPresent(p -> {
             throw new CuilEnUsoExcepcion("Ya existe un paciente con ese CUIL");
         });
         Paciente paciente = pacienteMapper.toEntity(dto);
         repositorioPaciente.guardarPaciente(paciente);
-        return pacienteMapper.toDto(paciente);
+        return ResponseEntity.status(201).body(pacienteMapper.toDto(paciente));
     }
 
     @PostMapping("pacientes/{dniPaciente}/diagnosticos")
-    public PacienteDTO agregarDiagnostico(@PathVariable Long dniPaciente,@Valid @RequestBody AgregarDiagnosticoDTO diagnostico) throws PacienteNoEncontradoExcepcion, DiagnosticoNoEncontradoExcepcion {
-        // El controlador tiene la responsabilidad de validar que el diagnostico exista o sea valido
-        repositorioDiagnostico.buscarDiagnosticoPorNombre(diagnostico.getNombre()).orElseThrow(() -> new DiagnosticoNoEncontradoExcepcion("Diagnostico no encontrado"));
-        Paciente paciente = repositorioPaciente.buscarPacientePorDni(dniPaciente).orElseThrow(() -> new PacienteNoEncontradoExcepcion("Paciente no encontrado"));
+    public ResponseEntity<PacienteDTO> agregarDiagnostico(@PathVariable Long dniPaciente,
+                                                          @Valid @RequestBody AgregarDiagnosticoDTO diagnostico) {
+        repositorioDiagnostico.buscarDiagnosticoPorNombre(diagnostico.getNombre())
+                .orElseThrow(() -> new DiagnosticoNoEncontradoExcepcion("Diagnostico no encontrado"));
+        Paciente paciente = repositorioPaciente.buscarPacientePorDni(dniPaciente)
+                .orElseThrow(() -> new PacienteNoEncontradoExcepcion("Paciente no encontrado"));
         paciente.agregarDiagnostico(diagnostico.getNombre());
-        return pacienteMapper.toDto(paciente);
+        return ResponseEntity.status(201).body(pacienteMapper.toDto(paciente));
     }
 
     @PostMapping("pacientes/{dniPaciente}/diagnosticos/{diagnostico}/evoluciones")
-    public PacienteDTO agregarEvolucion(
-        @PathVariable Long dniPaciente,
-        @PathVariable String diagnostico,
-        @Valid @RequestBody AgregarEvolucionDTO evolucion,
-        @RequestHeader("Authorization") String headerAutorizacion) throws PacienteNoEncontradoExcepcion{
-        Paciente paciente = repositorioPaciente.buscarPacientePorDni(dniPaciente).orElseThrow(() -> new PacienteNoEncontradoExcepcion("Paciente no encontrado"));
+    public ResponseEntity<PacienteDTO> agregarEvolucion(@PathVariable Long dniPaciente,
+                                                        @PathVariable String diagnostico,
+                                                        @Valid @RequestBody AgregarEvolucionDTO evolucion,
+                                                        @RequestHeader("Authorization") String headerAutorizacion) {
+        Paciente paciente = repositorioPaciente.buscarPacientePorDni(dniPaciente)
+                .orElseThrow(() -> new PacienteNoEncontradoExcepcion("Paciente no encontrado"));
         Medico medicoLogueado = obtenerMedicoLogueado(headerAutorizacion);
         paciente.agregarEvolucion(diagnostico, evolucion.getInforme(), medicoLogueado);
-        return pacienteMapper.toDto(paciente);
+        return ResponseEntity.status(201).body(pacienteMapper.toDto(paciente));  // Aquí devuelves PacienteDTO
     }
 
+
     @PostMapping("pacientes/{dniPaciente}/diagnosticos/{diagnostico}/evoluciones/{idEvolucion}/recetas-digitales")
-    public PacienteDTO crearRecetaDigital(
-            @PathVariable Long dniPaciente,
-            @PathVariable String diagnostico,
-            @PathVariable Long idEvolucion,
-            @Valid @RequestBody List<@Valid MedicamentoDTO> medicamentos,
-            @RequestHeader("Authorization") String headerAutorizacion) throws PacienteNoEncontradoExcepcion{
-        Paciente paciente = repositorioPaciente.buscarPacientePorDni(dniPaciente).orElseThrow(() -> new PacienteNoEncontradoExcepcion("Paciente no encontrado"));
+    public ResponseEntity<PacienteDTO> crearRecetaDigital(@PathVariable Long dniPaciente,
+                                                          @PathVariable String diagnostico,
+                                                          @PathVariable Long idEvolucion,
+                                                          @Valid @RequestBody List<@Valid MedicamentoDTO> medicamentos,
+                                                          @RequestHeader("Authorization") String headerAutorizacion) {
+        Paciente paciente = repositorioPaciente.buscarPacientePorDni(dniPaciente)
+                .orElseThrow(() -> new PacienteNoEncontradoExcepcion("Paciente no encontrado"));
         Medico medicoLogueado = obtenerMedicoLogueado(headerAutorizacion);
-        int codigoObraSocial = paciente.getObraSocial().getCodigo();
-        if (!obraSocialValidator.obraSocialEsValida(codigoObraSocial)) {
+        if (!obraSocialValidator.obraSocialEsValida(paciente.getObraSocial().getCodigo())) {
             throw new ObraSocialNoValidaExcepcion("Obra social no válida");
         }
         paciente.crearRecetaDigital(diagnostico, idEvolucion, medicamentoMapper.toEntity(medicamentos), medicoLogueado);
-        return pacienteMapper.toDto(paciente);
+        return ResponseEntity.status(201).body(pacienteMapper.toDto(paciente));
     }
 
     @PostMapping("pacientes/{dniPaciente}/diagnosticos/{diagnostico}/evoluciones/{idEvolucion}/pedidos-laboratorio")
-    public PacienteDTO crearPedidoLaboratorio(
-            @PathVariable Long dniPaciente,
-            @PathVariable String diagnostico,
-            @PathVariable Long idEvolucion,
-            @Valid @RequestBody CrearPedidoLaboratorioDTO dto,
-            @RequestHeader("Authorization") String headerAutorizacion) throws PacienteNoEncontradoExcepcion {
-        Paciente paciente = repositorioPaciente.buscarPacientePorDni(dniPaciente).orElseThrow(() -> new PacienteNoEncontradoExcepcion("Paciente no encontrado"));
+    public ResponseEntity<PacienteDTO> crearPedidoLaboratorio(@PathVariable Long dniPaciente,
+                                                              @PathVariable String diagnostico,
+                                                              @PathVariable Long idEvolucion,
+                                                              @Valid @RequestBody CrearPedidoLaboratorioDTO dto,
+                                                              @RequestHeader("Authorization") String headerAutorizacion) {
+        Paciente paciente = repositorioPaciente.buscarPacientePorDni(dniPaciente)
+                .orElseThrow(() -> new PacienteNoEncontradoExcepcion("Paciente no encontrado"));
         Medico medicoLogueado = obtenerMedicoLogueado(headerAutorizacion);
         paciente.crearPedidoLaboratorio(diagnostico, idEvolucion, dto.getTexto(), medicoLogueado);
-        return pacienteMapper.toDto(paciente);
+        return ResponseEntity.status(201).body(pacienteMapper.toDto(paciente));
     }
 
     @GetMapping("diagnosticos")
-    public List<DiagnosticoDTO> obtenerDiagnosticos(@RequestParam(required = false) String busqueda){
-        if(busqueda != null && !busqueda.isEmpty()){
-            return repositorioDiagnostico.buscarDiagnosticoPorNombre(busqueda).stream()
-                    .map(diagnosticoMapper::toDto)
-                    .toList();
-        }
-        return diagnosticoMapper.toDto(repositorioDiagnostico.obtenerDiagnostico());
+    public ResponseEntity<List<DiagnosticoDTO>> obtenerDiagnosticos(@RequestParam(required = false) String busqueda) {
+        List<DiagnosticoDTO> diagnosticos = (busqueda != null && !busqueda.isEmpty())
+                ? repositorioDiagnostico.buscarDiagnosticoPorNombre(busqueda).stream()
+                .map(diagnosticoMapper::toDto)
+                .toList()
+                : diagnosticoMapper.toDto(repositorioDiagnostico.obtenerDiagnostico());
+        return ResponseEntity.ok(diagnosticos);
     }
 }
