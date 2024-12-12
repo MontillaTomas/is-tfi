@@ -15,6 +15,7 @@ function MainPage() {
   const [evolutionAdded, setEvolutionAdded] = useState(false);
   const [diagnosisAdded, setDiagnosisAdded] = useState(false);
   const [labOrderAdded, setLabOrderAdded] = useState(false);
+  const [prescriptionAdded, setPrescriptionAdded] = useState(false);
 
   const { getPaciente } = usePaciente()
 
@@ -81,8 +82,9 @@ function MainPage() {
                   <PrescriptionBox    
                     selectedEvolution={selectedEvolution}
                     selectedPatient={selectedPatient} 
-                    setLabOrderAdded={setEvolutionAdded}
+                    setPrescriptionAdded={setPrescriptionAdded}
                     reloadPatientData={reloadPatientData}
+                    prescriptionAdded={prescriptionAdded}
                   />
                   <LabOrderBox 
                     selectedEvolution={selectedEvolution}

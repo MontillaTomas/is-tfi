@@ -103,26 +103,80 @@ const createLabOrder = async (dni, diagnostico, idEvolucion, texto) => {
     return data
 }
 
-const createPrescription = async (dni, diagnostico, idEvolucion, texto) => {
-
+const createPrescription = async (dni, diagnostico, idEvolucion, medication1, medication2) => {
     const token = Cookie.get("tokenAcceso");
-    const response = await fetch(`${API_URL}/${dni}/diagnosticos/${diagnostico}/evoluciones/${idEvolucion}/pedidos-laboratorio`, {
-        method: "POST",
-        headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-        },
-        body:JSON.stringify({
-            'texto':texto,
-        })
-    });
-    const data = await response.body();
 
-    console.log(data);
+    if (medication1.codigo && medication2.codigo) {
+        const response = await fetch(`${API_URL}/${dni}/diagnosticos/${diagnostico}/evoluciones/${idEvolucion}/recetas-digitales`, {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+        
+            body:JSON.stringify(
+                [
+                    medication1 ,
+                    medication2
+                ]
+            )
+        });
+
+        const data = await response.json();
+
+        console.log(data);
+        
+        if (!response.ok)  throw new Error(`${data.message}`);
     
-    if (!response.ok)  throw new Error(`${data.message}`);
+        return data
+    }else if (medication1.codigo) {
+        const response = await fetch(`${API_URL}/${dni}/diagnosticos/${diagnostico}/evoluciones/${idEvolucion}/recetas-digitales`, {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+        
+            body:JSON.stringify(
+                [
+                    medication1
+                ]
+            )
+        });
 
-    return data
+        const data = await response.json();
+
+        console.log(data);
+        
+        if (!response.ok)  throw new Error(`${data.message}`);
+    
+        return data
+    }else{
+        const response = await fetch(`${API_URL}/${dni}/diagnosticos/${diagnostico}/evoluciones/${idEvolucion}/recetas-digitales`, {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+        
+            body:JSON.stringify(
+                [
+                    medication2
+                ]
+            )
+        });
+
+        const data = await response.json();
+
+        console.log(data);
+        
+        if (!response.ok)  throw new Error(`${data.message}`);
+    
+        return data
+    }
+
+   
+   
 }
 
 export const pacienteService = {

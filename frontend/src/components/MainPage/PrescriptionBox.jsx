@@ -1,9 +1,17 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect} from 'react'
 import CreatePrescriptionModal from '../Modal/CreatePrescriptionModal'
 
-function PrescriptionBox({ selectedEvolution }) {
+function PrescriptionBox({ selectedEvolution, selectedPatient, setPrescriptionAdded, reloadPatientData, prescriptionAdded }) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   
+  useEffect(() => {
+    if (prescriptionAdded) {
+      reloadPatientData();
+      setPrescriptionAdded(false);
+    }
+  }, [prescriptionAdded, reloadPatientData, setPrescriptionAdded]);
+
+
   const receta = selectedEvolution?.recetasDigitales
   .reduce((ultima, receta) => {
       const fechaReceta = new Date(receta.fechaHora);
@@ -17,13 +25,13 @@ function PrescriptionBox({ selectedEvolution }) {
       <div className="mb-4">
         <h3 className="text-lg font-semibold">Última Receta:</h3>
         {receta  ? receta.medicamentos.map((medicamento,id)=>(
-          <p key={id}>Medicamento {id+1}: {medicamento.descripcion}</p>
+          <p key={id}>Medicamento {id+1}: {medicamento?.descripcion} - {medicamento?.formato}</p>
         ))
         :
         <p>No hay recetas</p>
         }
         {receta ? (
-          <p>Fecha: {receta.fechaHora}</p>
+          <p>Fecha: {new Date(receta.fechaHora).toLocaleString()}</p>
         ):<></>}
       </div>
       <button
@@ -32,7 +40,15 @@ function PrescriptionBox({ selectedEvolution }) {
       >
         Nueva Receta
       </button>
-      <CreatePrescriptionModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}  />
+      <CreatePrescriptionModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)}  
+        selectedPatient={selectedPatient?.dni}
+        selectedDiagnosis={selectedEvolution?.diagnosticoNombre}
+        selectedEvolution={selectedEvolution?.id}
+        setPrescriptionAdded={setPrescriptionAdded}
+        reloadPatientData={reloadPatientData}
+      />
     </div>
   )
 }

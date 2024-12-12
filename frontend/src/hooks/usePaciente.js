@@ -70,13 +70,29 @@ const usePaciente = () => {
     }
 
     const createLabOrder = async (dni, diagnostico, idEvolucion, texto) => {
-        console.log(dni,diagnostico,idEvolucion,texto);
         
         setLoading(true);
         setError(null)
         try {
             
             const data = await pacienteService.createLabOrder(dni, diagnostico, idEvolucion, texto);
+            console.log(data);
+            return data
+
+        } catch (error) {
+            throw `${error}`
+        }finally{
+            setLoading(false);
+        }
+    }
+
+    const createPrescription = async (dni, diagnostico, idEvolucion, medication1, medication2) => {
+        
+        setLoading(true);
+        setError(null)
+        try {
+            
+            const data = await pacienteService.createPrescription(dni, diagnostico, idEvolucion, medication1, medication2);
             console.log(data);
             return data
 
@@ -94,7 +110,8 @@ const usePaciente = () => {
         getPacientes, 
         createEvolution,
         createDiagnosis,
-        createLabOrder
+        createLabOrder,
+        createPrescription
     }
 
 }

@@ -1,9 +1,31 @@
-const API_URL = "https://istp1service.azurewebsites.net/api/servicio-salud/medicamentos?descripcion=";
+const API_URL = "https://cors-anywhere.herokuapp.com/https://istp1service.azurewebsites.net/api/servicio-salud/medicamentos";
 
-const getMedicines = async (descripcion) => {
+const getMedicines = async () => {
 
-    try {
-        const response = await fetch(`${API_URL}${descripcion}`, {
+        const response = await fetch(`${API_URL}/todos?pagina=10&limite=800`, {
+
+            method: 'GET',
+            headers: {
+                'accept': '*/*',
+            },
+        });
+
+        console.log(response);
+    
+        
+        const data = await response.json();
+        console.log(data);
+
+        if (!response.ok)  throw new Error(`HTTP error! status: ${response.status}`);
+        
+        return data
+   
+   
+}
+
+const getMedicine = async (codigo) => {
+
+        const response = await fetch(`${API_URL}/${codigo}`, {
 
             method: 'GET',
             headers: {
@@ -21,13 +43,10 @@ const getMedicines = async (descripcion) => {
         if (!response.ok)  throw new Error(`HTTP error! status: ${response.status}`);
         
         return data
-    } catch (error) {
-        console.error('Error fetching medicines:', error);
-        throw error;
-    }
+
    
 }
 
 export const generalsService = {
-    getMedicines
+    getMedicines, getMedicine
 }
