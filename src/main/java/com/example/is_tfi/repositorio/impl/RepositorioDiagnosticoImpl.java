@@ -3,12 +3,14 @@ package com.example.is_tfi.repositorio.impl;
 import com.example.is_tfi.dominio.Diagnostico;
 import com.example.is_tfi.dominio.Paciente;
 import com.example.is_tfi.repositorio.RepositorioDiagnostico;
+import org.springframework.stereotype.Repository;
 
 import java.text.Normalizer;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
+@Repository
 public class RepositorioDiagnosticoImpl implements RepositorioDiagnostico {
     private List<Diagnostico> diagnosticos;
     public RepositorioDiagnosticoImpl() {

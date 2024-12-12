@@ -17,6 +17,7 @@ import com.example.is_tfi.repositorio.impl.RepositorioPacienteImpl;
 import com.example.is_tfi.servicio.JwtService;
 import com.example.is_tfi.validator.ObraSocialValidator;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,15 +35,24 @@ public class ControladorClinica {
     private final ObraSocialValidator obraSocialValidator;
     private final DiagnosticoMapper diagnosticoMapper;
 
-    public ControladorClinica(JwtService jwtService, ObraSocialValidator obraSocialValidator) {
-        this.repositorioPaciente = new RepositorioPacienteImpl();
-        this.repositorioDiagnostico = new RepositorioDiagnosticoImpl();
-        this.repositorioMedico = new RepositorioMedicoImpl();
-        this.pacienteMapper = new PacienteMapper();
-        this.medicamentoMapper = new MedicamentoMapper();
+    @Autowired
+    public ControladorClinica(
+            RepositorioPaciente repositorioPaciente,
+            RepositorioDiagnostico repositorioDiagnostico,
+            RepositorioMedico repositorioMedico,
+            PacienteMapper pacienteMapper,
+            MedicamentoMapper medicamentoMapper,
+            JwtService jwtService,
+            ObraSocialValidator obraSocialValidator,
+            DiagnosticoMapper diagnosticoMapper) {
+        this.repositorioPaciente = repositorioPaciente;
+        this.repositorioDiagnostico = repositorioDiagnostico;
+        this.repositorioMedico = repositorioMedico;
+        this.pacienteMapper = pacienteMapper;
+        this.medicamentoMapper = medicamentoMapper;
         this.jwtService = jwtService;
         this.obraSocialValidator = obraSocialValidator;
-        this.diagnosticoMapper = new DiagnosticoMapper();
+        this.diagnosticoMapper = diagnosticoMapper;
     }
 
     private Medico obtenerMedicoLogueado(String headerAutorizacion) {
@@ -103,7 +113,7 @@ public class ControladorClinica {
                 .orElseThrow(() -> new PacienteNoEncontradoExcepcion("Paciente no encontrado"));
         Medico medicoLogueado = obtenerMedicoLogueado(headerAutorizacion);
         paciente.agregarEvolucion(diagnostico, evolucion.getInforme(), medicoLogueado);
-        return ResponseEntity.status(201).body(pacienteMapper.toDto(paciente));  // Aquí devuelves PacienteDTO
+        return ResponseEntity.status(201).body(pacienteMapper.toDto(paciente));
     }
 
 

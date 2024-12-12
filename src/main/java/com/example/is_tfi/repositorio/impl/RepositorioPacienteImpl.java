@@ -2,6 +2,7 @@ package com.example.is_tfi.repositorio.impl;
 
 import com.example.is_tfi.dominio.*;
 import com.example.is_tfi.repositorio.RepositorioPaciente;
+import org.springframework.stereotype.Repository;
 
 import java.text.Normalizer;
 import java.time.LocalDate;
@@ -12,6 +13,7 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+@Repository
 public class RepositorioPacienteImpl implements RepositorioPaciente {
     private List<Paciente> pacientes;
 
